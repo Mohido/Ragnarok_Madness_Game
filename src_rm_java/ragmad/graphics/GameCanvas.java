@@ -57,7 +57,7 @@ public class GameCanvas extends Canvas {
 		}
 		
 		/*Copying the GameEngine pixels to the image pixels (Acting as a buffer)*/
-		int[] ge_pixels = GameEngine.pixels;
+		int[] ge_pixels = GameEngine.GetPixels();
 		
 		
 		for(int i = 0; i  < ge_pixels.length ; i++) {

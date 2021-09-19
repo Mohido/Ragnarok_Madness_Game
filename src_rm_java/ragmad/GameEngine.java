@@ -14,11 +14,9 @@ public class GameEngine implements Runnable {
 	
 	private static Scene currentScene; 
 	
-	public static int[] pixels; 	// Every class should use this pixels to render!!
-	
-	public static double delta;
-	
-	public static Sound soundEngine;
+	private static int[] pixels; 	// Every class should use this pixels to render!!
+	private static double delta;
+	private static Sound soundEngine;
 	
 	private Thread thread;
 	private boolean running;
@@ -108,7 +106,6 @@ public class GameEngine implements Runnable {
 				this.update();
 				this.render();
 				fps++;
-				
 				delta--;
 			}
 			
@@ -135,21 +132,23 @@ public class GameEngine implements Runnable {
 	}
 	
 	
+	
+	public static synchronized void ChangeScene() {
+		String mapPath = Paths.get("").toAbsolutePath().getParent().toString() + "\\res\\map1.png";
+		currentScene = new GameScene(m_width, m_height,mapPath);
+		
+	}
+	
+	
 //------------------- Getters Area -----------------------
 	/**
 	 * Every game component and object should access this pixels array freely.
 	 * @return - The pixels array in which game components should render into. It will be copied to the GameCanvas Image
 	 */
-	public static synchronized int[] getPixels() {
-		return pixels;
-	}
-	
-	public static int getWidth() {return m_width;}
-	public static int getHeight() {return m_height;}
-	
-	
-	public static synchronized void ChangeScene() {
-		currentScene = new GameScene();
-	}
+	public static synchronized int[] GetPixels() {return pixels;}
+	public static int GetWidth() {return m_width;}
+	public static int GetHeight() {return m_height;}
+	public static double GetDelta()  {return delta;}
+	public static Sound GetSoundEngine() {return soundEngine;}
 	
 }
