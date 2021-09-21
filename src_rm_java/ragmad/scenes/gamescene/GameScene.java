@@ -12,7 +12,7 @@ public class GameScene implements Scene{
 	
 	
 	int xOffset, yOffset;
-	public final static int SCALING = 2;  // Change it if you want to see different scalings. 
+	public final static int SCALING = 1;  // Change it if you want to see different scalings. 
 	int xCord;
 	int yCord;
 	int frameMovement;
@@ -56,6 +56,10 @@ public class GameScene implements Scene{
 		if(Keyboard.isDown()) {yOffset -= frameMovement;}
 		if(Keyboard.isRight()) {xOffset-= frameMovement;}
 		if(Keyboard.isLeft()) {xOffset += frameMovement;}
+		
+		int[] testing = this.map.getTileAt(Mouse.x,Mouse.y,xOffset, yOffset);
+		if(testing == null) return;
+		
 	}
 
 	
@@ -71,7 +75,7 @@ public class GameScene implements Scene{
 			for(int y = 0 ; y < this.map.getHeight(); y++) {
 				if(this.map.getMap()[x+y*map.getWidth()] == 0xff5d3030)
 					renderBlock(Sprite.DESERT_TILE_2, x,y,20);
-				else
+				else 
 					renderTile(Sprite.DESERT_TILE_1, x, y);
 			}
 		}
@@ -106,7 +110,7 @@ public class GameScene implements Scene{
 		int s_height_half = s_height >> 1;
 		int s_width_half = s_width >> 1;
 
-		for(int y = 0 ;y <s_height; y++) {
+		for(int y = 0 ; y < s_height; y++) {
 			int yy = y - xCord * s_height_half + yCord * s_height_half + yOffset;   //Mapping coordinates space to the GameEngine pixel Space (Raster space) //yOffset for vertical movement
 			if( yy >= GameEngine.GetHeight()) break;
 			if(yy < 0) continue;

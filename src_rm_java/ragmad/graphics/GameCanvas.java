@@ -40,10 +40,6 @@ public class GameCanvas extends Canvas {
 	 * Rendering the canvas with the new image
 	 * */
 	public void render() {
-
-		
-		
-		
 		BufferStrategy bfr = this.getBufferStrategy(); 		// Return the currently used buffer strategy
 		try {
 			if(bfr == null) { 

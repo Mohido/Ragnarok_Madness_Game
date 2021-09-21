@@ -70,7 +70,10 @@ public class GameEngine implements Runnable {
 	private synchronized void render() {
 		for(int i =0 ;i < pixels.length ; i++) {pixels[i] = 0xff87CEEB;}
 		currentScene.render(); 
-		this.window.render();
+		
+		
+		
+		this.window.render(); // draw the pixels that we have currently to the window
 	}
 	
 	
@@ -112,7 +115,7 @@ public class GameEngine implements Runnable {
 			//Show the result after completing 1 sec to measure the fps
 			if(System.currentTimeMillis() - timer > 1000) {
 				timer+= 1000; //To keep tracking with real time process shifting (It is not accurate 100%)
-				System.out.println(fps + " updates");
+				//System.out.println(fps + " updates");
 				fps = 0;
 			}
 		 }
