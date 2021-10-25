@@ -9,6 +9,11 @@ import ragmad.scenes.gamescene.Map;
 
 public abstract class Characters extends Entity {
 	protected Sprite sprites;
+
+	public int getDirection() {
+		return direction;
+	}
+
 	protected int direction = 0;
 	protected boolean isMoving = false;
 	
