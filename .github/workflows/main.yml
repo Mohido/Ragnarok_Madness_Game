@@ -16,7 +16,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
         matrix:
-            os: [ubuntu-latest, windows-latest, macOS-latest]
+            os: [windows-latest, macOS-latest]
     
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -29,18 +29,9 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
           cache: 'maven'
-
-      # Runs a set of commands using the runners shell
-      - name: Downloading depencies and testing the project
-        run: mvn test --file pom.xml -Djava.awt.headless=true # though this is the default file.
-
-      # Runs a set of commands using the runners shell
-      - name: Compiling the project
-        run: mvn compile --file pom.xml -Djava.awt.headless=true # though this is the default file.
-
-
+          
         # Runs a set of commands using the runners shell
-      - name: Packaging into .jar file
+      - name: Compiling, Testing and Packaging with 1 maven step.
         run: mvn package --file pom.xml -Djava.awt.headless=true # though this is the default file.
 
       - name: check build exists
