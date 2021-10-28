@@ -33,10 +33,10 @@ jobs:
       - name: Check resource
         run : | 
           cd res
-          ls -a
+          ls
           cd sounds 
           echo sound files are:
-          ls -a
+          ls
           cd ..
           cd ..
         
