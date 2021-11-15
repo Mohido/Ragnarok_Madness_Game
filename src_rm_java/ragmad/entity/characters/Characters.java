@@ -38,7 +38,7 @@ public abstract class Characters extends Entity {
 		if(dirX < 0 && dirY < 0) direction = Direction.UP_LEFT;
 		if(dirX > 0 && dirY < 0) direction = Direction.UP_RIGHT;
 		
-
+ 
 		double temp = Math.sqrt(dirX*dirX + dirY*dirY);
 		
 		double modifiedDirX = (3 * dirX/temp);

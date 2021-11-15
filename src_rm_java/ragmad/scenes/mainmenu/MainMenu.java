@@ -39,7 +39,7 @@ public class MainMenu implements Scene {
 	 * @param m_height - The //////	/	/	/	/	/	/	/	/	/	/
 	 * @param url - The path of the background photo.
 	 */
-	public MainMenu(int m_width, int m_height, String url, String[] options, String[] optionSounds ) {
+	public MainMenu(int m_width, int m_height, String url, String[] options, String[] optionSounds, String themeSong) {
 		this.m_height = m_height;
 		this.m_width = m_width;
 		
@@ -58,11 +58,10 @@ public class MainMenu implements Scene {
 
 			return;
 		}
-
+		
 		initOptions(options, optionSounds);
-
 		if(GameEngine.GetSoundEngine() != null) {
-			GameEngine.GetSoundEngine().updateAudio(MusicClips.MAINMENU.toString(),1000,true);
+			GameEngine.GetSoundEngine().updateAudio(themeSong, 1000, true);
 		}
 	}
 	 

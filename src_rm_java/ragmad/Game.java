@@ -21,7 +21,7 @@ import ragmad.sound_engine.MusicClips;
  *
  */
 public class Game {
-
+ 
 	
 	/*Sound Paths*/
     final String MUSIC_GOT_URL = Paths.get("").toAbsolutePath().getParent().toString() + "/res/sounds/got.wav";
@@ -86,7 +86,7 @@ public class Game {
 		opts[0] = "Start";		buttonSounds[0] =  SOUND_SLASH_URL;
 		opts[1] = "Settings";	buttonSounds[1] =  SOUND_SLASH_URL;
 		opts[2] = "Exit";		buttonSounds[2] =  SOUND_SLASH_URL;
-		return new MainMenu(GameEngine.GetWidth(), GameEngine.GetHeight(), MENU_IMAGE_URL, opts, buttonSounds);
+		return new MainMenu(GameEngine.GetWidth(), GameEngine.GetHeight(), MENU_IMAGE_URL, opts, buttonSounds, MUSIC_GOT_URL);
 	}
 	
 	
