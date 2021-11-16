@@ -5,9 +5,9 @@ name: Ragnarok Madness CI and CD
 # Controls when the workflow will run
 on:
   push:
-    branches: [ master ]
+    branches: [ master,extra-tool2 ]
   pull_request:
-    branches: [ master ]
+    branches: [ master ,extra-tool2]
   workflow_dispatch:
 
 
