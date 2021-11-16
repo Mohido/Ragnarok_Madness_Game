@@ -5,9 +5,9 @@ name: Ragnarok Madness CI and CD
 # Controls when the workflow will run
 on:
   push:
-    branches: [ master ]
+    branches: [ master,extra-tool2 ]
   pull_request:
-    branches: [ master ]
+    branches: [ master ,extra-tool2]
   workflow_dispatch:
 
 
@@ -16,7 +16,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
         matrix:
-            os: [macOS-latest] # macOS was chosen because of how the runner interprets the file paths. File paths are having problems when used in other runners. 
+            os: [windows-latest] # macOS was chosen because of how the runner interprets the file paths. File paths are having problems when used in other runners. 
     
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
