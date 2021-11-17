@@ -41,7 +41,7 @@ jobs:
           cd ..
         
       - name : Generting javadoc
-        run : find ragmad -type f -name "*.java" | xargs javadoc -d docs
+        run : pwd
         
         # Runs a set of commands using the runners shell
       - name: Compiling, Testing and Packaging with 1 maven step.
