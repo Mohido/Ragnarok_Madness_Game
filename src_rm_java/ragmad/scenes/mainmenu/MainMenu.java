@@ -19,6 +19,9 @@ import ragmad.io.Mouse;
 import ragmad.scenes.Scene;
 import ragmad.sound_engine.*;
 
+/**
+ * GUI for the Main Menu
+ */
 public class MainMenu implements Scene {
 	
 	// Background image...
@@ -31,13 +34,15 @@ public class MainMenu implements Scene {
 	private Choice[] options;
 	private Sound music;
 	
-	
-	
+
 	/**
-	 * 
-	 * @param m_width - The width of the main menu. Currently it is the same as the Engine width
-	 * @param m_height - The //////	/	/	/	/	/	/	/	/	/	/
-	 * @param url - The path of the background photo.
+	 * Initializes the main menu scene
+	 * @param m_width The width of the main menu.
+	 * @param m_height The height of the main menu.
+	 * @param url The path of the background photo.
+	 * @param options options to be displayed on the main menu.
+	 * @param optionSounds different sound options
+	 * @param themeSong theme song of the game
 	 */
 	public MainMenu(int m_width, int m_height, String url, String[] options, String[] optionSounds, String themeSong) {
 		this.m_height = m_height;

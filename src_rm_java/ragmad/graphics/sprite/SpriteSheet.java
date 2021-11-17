@@ -76,7 +76,8 @@ public class SpriteSheet {
 	 * @param yOffset - y-axis: column of the sprite you want to crop from the spritesheet
 	 * @param width - The width of the sprite you want to crop
 	 * @param height - The height of the sprite you want to crop
-	 * @param pixels - a reference array of pixels in which the croppepd values will be fed into. 
+	 * @param pixels - a reference array of pixels in which the croppepd values will be fed into.
+	 * @param xPeak - the amount of x to be cropped
 	 */
 	public void crop(int xOffset, int yOffset , int width, int height , int[] pixels, int xPeak) {
 		for(int y = 0; y < height ; y++) {

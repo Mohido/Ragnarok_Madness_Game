@@ -10,6 +10,9 @@ import ragmad.io.Keyboard;
 import ragmad.scenes.gamescene.GameScene;
 import ragmad.scenes.gamescene.Tile;
 
+/**
+ * Player in the game
+ */
 public class Player extends Characters {
 	
 	
@@ -46,7 +49,7 @@ public class Player extends Characters {
 	
 	
 	/**
-	 * A more profissional and dynamic Player class. It can create a player and defines its animation sprites, and directions/animation mapping.
+	 * Constructs and initializes a Player. It can create a player and defines its animation sprites, and directions/animation mapping.
 	 * @param x - This is the X position of the player.	Positive X means move the player Right from the top-left of the screen.
 	 * @param y - This is the Y position of the player. Positive Y means move the player Downwards from the top-left of the screen
 	 * @param animationSprites - This is an array that contains all the Sprites that the player going to use. Define the Sprites in a contigoues order. E.g: Up sprites, then Down direction sprites and so on. Note: Sprites number per direction must be same. 

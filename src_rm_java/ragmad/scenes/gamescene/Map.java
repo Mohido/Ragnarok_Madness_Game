@@ -71,11 +71,16 @@ public class Map {
 	
 	/**
 	 * Get the exact tile from raster coordinate system.
-	 * Pre-requisites: Tiles map.
-	 * Ported From:
-	 * 		Source: https://github.com/jorgt/perlin-landscape/pull/1/commits/9a8504043d2c02df507a6b1b3be794aee801b5ad
-	 * 		Source: https://stackoverflow.com/questions/21842814/mouse-position-to-isometric-tile-including-height
+	 * ://stackoverflow.com/questions/21842814/mouse-position-to-isometric-tile-including-height
 	*/
+	/**
+	 * Get the exact tile from raster coordinate system.
+	 * @param mouseX x-coordinate of the mouse
+	 * @param mouseY y-coordinate of the mouse
+	 * @param xOffset how much the scene has moved in x direction
+	 * @param yOffset how much the scene has moved in y direction
+	 * @return exact tile at that location
+	 */
 	public int[] getTileAt(int mouseX,int mouseY, int xOffset, int yOffset) {
         //	half width, height... MUST BE SUBSTITUTED PROPERLY
         var tileWidth = (this.tileWidth * GameScene.SCALING) >> 1; 
@@ -192,7 +197,7 @@ public class Map {
 	 * Checks if the tile exists
 	 * @param x x co-ordinate of the tile
 	 * @param y y co-ordinate of the tile
-	 * @return
+	 * @return boolean if tile exists or not
 	 */
 	public boolean tileExists(int x, int y) {return x >= 0 & y >= 0 & x < width & y < height;}
 
@@ -215,7 +220,7 @@ public class Map {
 
 	/**
 	 * Receives an int color and returns  tile corresponding to that color.
-	 * @param color
+	 * @param color int color value
 	 * @return return tile type
 	 */
 	public Tile getTile(Integer color){ return this.hashmap.get(color); }

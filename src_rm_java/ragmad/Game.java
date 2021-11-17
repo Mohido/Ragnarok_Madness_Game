@@ -43,10 +43,11 @@ public class Game {
 	final Sprite PORTAL_TILE_1 = new Sprite(PORTAL_SHEET, 0, 0, 128, 64, -1, 1, 0);
 
 	
-	
-	
+
 	/**
 	 * Here we load all the GameProperties and initializes the Game engine.
+	 * @param width width of the game window
+	 * @param height height of the game window
 	 */
 	public Game(int width, int height) {
 		

@@ -2,6 +2,9 @@ package ragmad.sound_engine;
 
 import java.nio.file.Paths;
 
+/**
+ * Initialises the music clips for the game
+ */
 public class MusicClips {
 	
     public final static MusicClips MAINMENU = new MusicClips( "res/sounds/got.wav");
