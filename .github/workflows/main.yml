@@ -16,7 +16,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
         matrix:
-            os: [windows-latest] # macOS was chosen because of how the runner interprets the file paths. File paths are having problems when used in other runners. 
+            os: [macOS-latest] # macOS was chosen because of how the runner interprets the file paths. File paths are having problems when used in other runners. 
     
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
