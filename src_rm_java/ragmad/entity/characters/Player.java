@@ -70,9 +70,8 @@ public class Player extends Characters {
 	
 	/**
 	 * A methode which updates the players object (It is thread)
-	 * @frameMovement the movement of the character by pixels
-	 * @Map the world map
-	 * @colorMap hashmap which returns tile by color
+	 * @param frameMovement the movement of the character by pixels
+	 * @param map the world map
 	 * */
 	public void update(int frameMovement, Map map) {
 
@@ -111,7 +110,7 @@ public class Player extends Characters {
 	/**
 	 * Method that renders the player on the screen
 	 * 
-	 * @SCALING the scaling rate of the player
+	 * @param SCALING the scaling rate of the player
 	 * */
 	public void render(int SCALING) {
 		int[] outputPixels = GameEngine.GetPixels();

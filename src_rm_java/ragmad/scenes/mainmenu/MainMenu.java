@@ -50,6 +50,7 @@ public class MainMenu implements Scene {
 		this.backgroundImage = new BufferedImage(m_width, m_height,  BufferedImage.TYPE_INT_ARGB); // The scene background image buffer
 		
 		Image img = null;
+		System.out.println(url);
 		try{
 			 img = ImageIO.read(new File(url));
 			 backgroundImage.getGraphics().drawImage( img, 0, 0 , m_width, m_height, null); // Storing the background image in the buffer.

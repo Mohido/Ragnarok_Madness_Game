@@ -5,11 +5,7 @@ import ragmad.graphics.sprite.*;
 
 
 
-/**
- * Not being used at the moment.. Needs implementation :/
- * @author Mohido
- *
- */
+
 public class Tile {
 	
 	

@@ -49,8 +49,8 @@ public class SpriteSheet {
 	
 	/**
 	 * Crops a specific sprite from the object's Sprite-Sheet.
-	 * @param xCoordinates - x-axis: row of the sprite you want to crop from the photo
-	 * @param yCoordinates - y-axis: column of the sprite you want to crop from the spritesheet
+	 * @param xOffset - x-axis: row of the sprite you want to crop from the photo
+	 * @param yOffset - y-axis: column of the sprite you want to crop from the spritesheet
 	 * @param width - The width of the sprite you want to crop
 	 * @param height - The height of the sprite you want to crop
 	 * @param pixels - a reference array of pixels in which the croppepd values will be fed into. 
@@ -72,8 +72,8 @@ public class SpriteSheet {
 
 	/**
 	 * Crops a specific sprite from the object's Sprite-Sheet.
-	 * @param xCoordinates - x-axis: row of the sprite you want to crop from the photo
-	 * @param yCoordinates - y-axis: column of the sprite you want to crop from the spritesheet
+	 * @param xOffset - x-axis: row of the sprite you want to crop from the photo
+	 * @param yOffset - y-axis: column of the sprite you want to crop from the spritesheet
 	 * @param width - The width of the sprite you want to crop
 	 * @param height - The height of the sprite you want to crop
 	 * @param pixels - a reference array of pixels in which the croppepd values will be fed into. 

@@ -77,8 +77,12 @@ public class Game {
 		engine.start();
 		
 	}
-	 
-	
+
+	/**
+	 * Initialises the Main Menu scene
+	 * @return main menu
+	 */
+
 	private MainMenu initMainMenu() {
 		//Init Main Menu Scene
 		String[] opts = new String[3];

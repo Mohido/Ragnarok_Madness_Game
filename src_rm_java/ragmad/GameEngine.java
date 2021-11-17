@@ -11,6 +11,9 @@ import ragmad.scenes.mainmenu.MainMenu;
 import ragmad.scenes.settingsscene.Settings;
 import ragmad.sound_engine.Sound;
 
+/**
+ * Renders the game to the screen
+ */
 public class GameEngine implements Runnable {
 
 	private GameWindow window;
@@ -39,8 +42,8 @@ public class GameEngine implements Runnable {
 //-------------- Constructors Area ---------------
 	/**
 	 * Build a game prototype with the given size.
-	 * @param m_width - game width
-	 * @param m_height - game height
+	 * @param width - game width
+	 * @param height - game height
 	 */
 	public GameEngine(int width, int height) {
 		m_height = height;
@@ -157,13 +160,12 @@ public class GameEngine implements Runnable {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
-	
-	
-	
-	/*Map should be changed Dynamically later*/
+
+
+	/**
+	 * Changes the current scene to the one provided in parameter
+	 * @param scene scene to be displayed
+	 */
 	public static synchronized void ChangeScene(String scene) {
 		if(scene.equals("GameScene")){
 			currentScene = gamescene;

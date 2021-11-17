@@ -24,6 +24,7 @@
         <testSourceDirectory>src_rm_java/test</testSourceDirectory>
         <testOutputDirectory>${project.basedir}/bin/test</testOutputDirectory>
         <plugins>
+
             <!-- Java Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

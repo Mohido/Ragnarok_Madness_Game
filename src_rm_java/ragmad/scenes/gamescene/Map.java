@@ -187,7 +187,15 @@ public class Map {
 	
 
 	/// ________________________________ GETTERS AREA ___________________________
+
+	/**
+	 * Checks if the tile exists
+	 * @param x x co-ordinate of the tile
+	 * @param y y co-ordinate of the tile
+	 * @return
+	 */
 	public boolean tileExists(int x, int y) {return x >= 0 & y >= 0 & x < width & y < height;}
+
 	public int getTileYIncrementByTileZ(int tileZ) {return 0;} // Might be needed in the getTileAt() function
 	public int[] getMap() {return this.map;}
 	public int getWidth() {return this.width;}
@@ -204,6 +212,12 @@ public class Map {
 	public int getColumn(int mouseX, int firstTileXShiftAtScreen, int columnWidth) {return (mouseX - firstTileXShiftAtScreen) / columnWidth;}
 	public HashMap<Integer, Tile> getColorMap(){return this.hashmap;}
 	//method which receives an int i.e color, return tile type
+
+	/**
+	 * Receives an int color and returns  tile corresponding to that color.
+	 * @param color
+	 * @return return tile type
+	 */
 	public Tile getTile(Integer color){ return this.hashmap.get(color); }
 	
 }
