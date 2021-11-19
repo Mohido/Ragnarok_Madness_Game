@@ -80,7 +80,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
             name: report-artifact
-            path: bin/site
+            path: site
 
   javadoc-generation:
     runs-on: ${{ matrix.os }}
