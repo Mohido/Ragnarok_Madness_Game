@@ -26,7 +26,7 @@ public abstract class Characters extends Entity {
 	 * @param colorsMap A hash map of colors which returns tile
 	 * @param sprites sprites object which update the sprite of the player
 	 * */
-	public void move(int dirX, int dirY, Map map, HashMap<Integer, Tile> colorsMap, Sprite sprites) {
+	public void move(double dirX, double dirY, Map map, HashMap<Integer, Tile> colorsMap, Sprite sprites) {
 		this.sprites = sprites;
 		
 		if(dirX > 0) direction = Direction.RIGHT;
@@ -38,20 +38,13 @@ public abstract class Characters extends Entity {
 		if(dirX < 0 && dirY < 0) direction = Direction.UP_LEFT;
 		if(dirX > 0 && dirY < 0) direction = Direction.UP_RIGHT;
 		
- 
-		double temp = Math.sqrt(dirX*dirX + dirY*dirY);
 		
-		double modifiedDirX = (3 * dirX/temp);
-		
-		double modifiedDirY = (3* dirY/temp);
-		
-		if(!collision( 0,  modifiedDirY, map, colorsMap)) {
-			
-			GameScene.yOffset += modifiedDirY ;
+		if(!collision( 0,  dirY, map, colorsMap)) {
+			GameScene.yOffset += dirY ;
 		}
 		
-		if(!collision( 2 * modifiedDirX,  0, map, colorsMap)) {
-			GameScene.xOffset += modifiedDirX;
+		if(!collision( 2 * dirX,  0, map, colorsMap)) {
+			GameScene.xOffset += dirX;
 		}
 	}
 	

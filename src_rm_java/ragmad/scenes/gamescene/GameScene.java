@@ -25,9 +25,17 @@ public class GameScene implements Scene{
 	private Map map;
 	private Player player; 	
 	private ArrayList<ItemCapsule> itemCapsules; // Stores the items on the scene.
+	private final static int interactionRadiusSqr = 50*50;
+	
 	
 	/// _________________________ Constructor Area_________________________________
-	
+	/**
+	 * Creates a game scene with the given parameters
+	 * @param width - visibility width
+	 * @param height - visibility height
+	 * @param map - map that defines the world
+	 * @param player - player to play in the scene.
+	 */
 	public GameScene(int width, int height, Map map, Player player) {
 		this.m_height = height;
 		this.m_width = width;
@@ -81,19 +89,38 @@ public class GameScene implements Scene{
 	public void update() {
 		frameMovement = 5;// (int)(5.0 *  (GameEngine.GetDelta())); /// <--- BUG: Delta Time is not set properly.
 		player.update(frameMovement, this.map);
-
-			/*if(Keyboard.isUp()) yOffset+=frameMovement;
-			if(Keyboard.isDown()) yOffset-=frameMovement;
-			if(Keyboard.isRight()) xOffset-=frameMovement;
-			if(Keyboard.isLeft()) xOffset+=frameMovement;*/
-
-		if (Keyboard.esc()) {
+		
+		if (Keyboard.esc()) { 
 			GameEngine.ChangeScene("Menu");
 		}
-
-		int[] testing = this.map.getTileAt(Mouse.x,Mouse.y,(int)xOffset,(int) yOffset);
-		if(testing == null) return;
 		
+		
+		int i = 0;
+		while(i < this.itemCapsules.size()) {
+			double xItemCenter = this.itemCapsules.get(i).x + (this.map.getTileWidth()>>1);
+			double yItemCenter = this.itemCapsules.get(i).y;
+			double xDist = (- this.player.x + 20) - xItemCenter;
+			xDist = xDist*xDist;
+			double yDist = (- this.player.y + 20) - yItemCenter;
+			yDist = yDist*yDist;
+			
+			double distanceSqr = xDist + yDist; 
+			boolean inItemRadius =  distanceSqr <= interactionRadiusSqr;
+			
+			if(Keyboard.equip() && inItemRadius) {
+				/*remove Item from the array list and equip it to the player*/
+				ItemCapsule itc = this.itemCapsules.remove(i);
+				Item it = itc.getItem();
+				this.player.addItem(it);
+			}else if(inItemRadius) { // tell user that he can equip an item.
+				System.out.println("ItemCapsule in range, press 'E' to equip.");
+				i++;
+			}
+			else {			
+				i++;
+			}
+			
+		}
 	}
 
 	
@@ -119,8 +146,6 @@ public class GameScene implements Scene{
 		
 		renderCapsules(); 
 		player.render(1);
-		
-		
 	}
 	
 	/**
@@ -149,14 +174,16 @@ public class GameScene implements Scene{
 	}
 	
 	
-	
+	/**
+	 * Zooming in is used to scale the view. Zooming into the game.
+	 */
 	public static void zoomIn() { SCALING = (SCALING < 2 )? SCALING + 1 : 2 ;}
+	
+	/**
+	 * Zooming out is used to scale out the view. Zooming out of the game.
+	 */
 	public static void zoomOut() { SCALING = (SCALING > 1 )? SCALING - 1 : 1 ;}
 	
 	
 	
 }
-
-
-
-//keyboard shortkey

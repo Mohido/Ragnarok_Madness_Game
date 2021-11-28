@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import ragmad.entity.characters.Direction;
 import ragmad.entity.characters.Player;
+import ragmad.entity.item.WeaponItem;
 import ragmad.graphics.sprite.Sprite;
 import ragmad.graphics.sprite.SpriteSheet;
 import ragmad.scenes.gamescene.GameScene;
@@ -37,15 +38,15 @@ public class Game {
 	final SpriteSheet PORTAL_SHEET = new SpriteSheet(Paths.get("").toAbsolutePath().getParent()  + "/res/porotals.png");
 	final SpriteSheet PLAYER_SHEET = new SpriteSheet( Paths.get("").toAbsolutePath().getParent() + "/res/jaden_yuki_2.png");
 	final SpriteSheet CAPSULE_SHEET = new SpriteSheet( Paths.get("").toAbsolutePath().getParent() + "/res/capsules.png");
-	
+	final SpriteSheet BULLET_SHEET = new SpriteSheet( Paths.get("").toAbsolutePath().getParent() + "/res/bullet1.png");
+
 	
 	/*Loading Sprites*/
 	final Sprite DESERT_TILE_1 = new Sprite(DESERT_SHEET, 0, 0, 64, 32);
 	final Sprite DESERT_TILE_2 = new Sprite(DESERT_SHEET, 0, 1, 64, 32);
 	final Sprite PORTAL_TILE_1 = new Sprite(PORTAL_SHEET, 0, 0, 128, 64, -1, 1, 0);
-
 	final Sprite CAPSULE_1 = new Sprite(CAPSULE_SHEET, 0, 0, 32, 32);
-	
+	final Sprite BULLET_1 = new Sprite(BULLET_SHEET, 0, 0, 16, 16);
 
 	/**
 	 * Here we load all the GameProperties and initializes the Game engine.
@@ -64,7 +65,7 @@ public class Game {
 		//Creates a GameScene
 		GameScene gameScene = initGameScene(player);
 		gameScene.zoomIn();
-		gameScene.addItemCapsule(1, 0, null, CAPSULE_1);
+		gameScene.addItemCapsule(1, 0, new WeaponItem("Corruption Pistol", 10, BULLET_1, 5), CAPSULE_1);
 		
 		// Creates a Main Menu
 		MainMenu mainMenu = initMainMenu();
@@ -79,7 +80,7 @@ public class Game {
 		engine.InitMainMenu(mainMenu);
 		engine.ChangeScene("Menu");
 		
-		engine.start();
+		engine.start(); 
 		
 	}
 

@@ -2,11 +2,15 @@ package ragmad.entity.characters;
 
 import ragmad.scenes.gamescene.Map;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import ragmad.GameEngine;
+import ragmad.entity.item.Item;
+import ragmad.entity.item.WeaponItem;
 import ragmad.graphics.sprite.Sprite;
 import ragmad.io.Keyboard;
+import ragmad.io.Mouse;
 import ragmad.scenes.gamescene.GameScene;
 import ragmad.scenes.gamescene.Tile;
 
@@ -25,6 +29,7 @@ public class Player extends Characters {
 	private HashMap<Direction, Integer> spriteMap;
 	private int currentAnimationCol;
 	
+	private ArrayList<Item> inventory; /// Inventory is a bag. It stores different kind of items. However, for the simplicity, we are taking first picked item as a weaponItem .
 	
 	/**
 	 * A testing implementation for creating a spriteless player with no animation. Note that this will not work! It is only for testing purposes.
@@ -57,9 +62,8 @@ public class Player extends Characters {
 		this.animationCols = animationsPerType;
 		this.animationRows = animationTypes;
 		this.curSprite = animationSprites[0];
+		this.inventory = new ArrayList();
 	}
-	
-	
 	
 	
 	/**
@@ -78,10 +82,15 @@ public class Player extends Characters {
 		if(Keyboard.isDown()) yOffset-=frameMovement;
 		if(Keyboard.isRight()) xOffset-=frameMovement;
 		if(Keyboard.isLeft()) xOffset+=frameMovement;
+		double modifiedDirX = 0;
+		double modifiedDirY = 0;
 		
-		
-		if(xOffset != 0 || yOffset != 0) { 
-			move(xOffset, yOffset, map, map.getColorMap(), curSprite);
+		if(xOffset != 0 || yOffset != 0) {
+			double temp = Math.sqrt(xOffset*xOffset + yOffset*yOffset);
+			modifiedDirX = (3 * xOffset/temp);
+			modifiedDirY = (3* yOffset/temp);
+			
+			move(modifiedDirX, modifiedDirY, map, map.getColorMap(), curSprite);
 			isWalking = true;
 			int a_r = this.spriteMap.get(direction); // Get the row of the animation sprite we will be animating. 
 			int a_c = this.currentAnimationCol;
@@ -90,13 +99,18 @@ public class Player extends Characters {
 			isWalking = false;
 		}
 		
-		/*NEXT: Check if player is in range with any of the items. And if it is, he can pick it up with pressing 'E'*/
+		/*Shoot if mouse is pressed*/ 
+		if(Mouse.buttonNum == 1 && this.inventory.size() > 0 && inventory.get(0) instanceof WeaponItem) {
+			double angle_r = Math.atan2(Mouse.y - (GameEngine.GetHeight()>>1), Mouse.x - (GameEngine.GetWidth() >> 1) );
+			((WeaponItem)inventory.get(0)).shoot(angle_r, -(int)this.x, -(int)this.y);
+		} 
 		
-		
+		/*update projectiles*/
+		if( this.inventory.size() > 0 && inventory.get(0) instanceof WeaponItem) {
+			((WeaponItem)this.inventory.get(0)).offsetChange(modifiedDirX, modifiedDirY); // if player moves, offset the projectiles
+			((WeaponItem)this.inventory.get(0)).update();  // update projectiles movement.
+		}
 	}
-	
-	
-	
 	
 	
 	
@@ -112,18 +126,14 @@ public class Player extends Characters {
 		int s_height =( curSprite.getHeight()*SCALING);
 		int s_width = (curSprite.getWidth()*SCALING);
 
-		
-		
 		int xPixel = (int)x;
 		int yPixel = (int)y;
-		
-		
-		//System.out.println(xPixel + ", " + yPixel);
+
 		for(int y = 0 ; y < s_height; y++) {
 			int yy = y - yPixel;   //Mapping coordinates space to the GameEngine pixel Space (Raster space) //yOffset for vertical movement
 			if( yy >= GameEngine.GetHeight()) break;
 			if(yy < -s_height) break;
-			if(yy < 0) continue; 
+			if(yy < 0) continue;  
 			for(int x = 0 ; x < s_width; x++) {
 				int xx = x - xPixel;
 				int col = tilePixels[x/SCALING + (y/SCALING) * curSprite.getWidth()]; // getting the pixel colour of the tile
@@ -133,10 +143,24 @@ public class Player extends Characters {
 				if( xx < 0 || (col & 0xff000000) == 0 )  //don't do anything if the xx is out of bounds or pixel is transparent 
 					continue;
 				
-				if(col != 0xffd6e7ea)outputPixels[xx + yy * GameEngine.GetWidth()] = col;
+				if(col != 0xffd6e7ea) outputPixels[xx + yy * GameEngine.GetWidth()] = col;
 			}
 		}
-
-
+		
+		/*Render projectiles*/
+		if( this.inventory.size() > 0 && inventory.get(0) instanceof WeaponItem) {
+			((WeaponItem)this.inventory.get(0)).render();
+		}
 	}
+
+
+	/**
+	 * Add an item to the inventory.
+	 * @param it - The item wanted to be added to the inventory (Picked up Item)
+	 */
+	public void addItem(Item it) {
+		System.out.println("Added Item: " + it.toString());
+		this.inventory.add(it);
+	}
+	
 }

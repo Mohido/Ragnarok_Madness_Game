@@ -52,12 +52,6 @@ public class ItemCapsule extends Entity {
 		}
 	}
 	
-	
-	/*=----------------------------Getters area---------------------------==*/
-	public int getXCord () {return this.xCord;}
-	public int getYCord () {return this.yCord;}
-	
-	
 	/**
 	 * This is used for updating the raster position of the item capsule. It is better called whenever the Offset is changed in the gamescene. Or before rendering to set the raster coordinates
 	 * 
@@ -75,7 +69,30 @@ public class ItemCapsule extends Entity {
 		this.y = yCord * n_height_half - xCord * n_height_half + yOffset - n_height_half/2;
 	}
 	
+	/*=----------------------------Getters area---------------------------==*/
+	/**
+	 * Gets the xCordinates of the Item Capsule.
+	 * @return - Isometric X coordinates (Corresponding to the map)
+	 */
+	public int getXCord () {return this.xCord;}
 	
-
+	/**
+	 * Gets the yCordinates of the Item Capsule.
+	 * @return - Isometric Y coordinates (Corresponding to the map)
+	 */
+	public int getYCord () {return this.yCord;}
 	
+	/**
+	 * Gets the Item stored within the capsule
+	 * @return - The item stored within the capsule
+	 */
+	public Item getItem() {return this.item;}
 }
+
+
+
+
+
+
+
+

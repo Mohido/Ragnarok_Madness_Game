@@ -25,12 +25,15 @@ public class Map {
 	private int tileWidth, tileHeight;
 	
 
-	//map is given in the constructor
+	/**
+	 * Creating a map.
+	 * @param path - Paths of the map IDs
+	 * @param hm - Hashmap which defines the ID -> Tile relation.
+	 */
 	public Map(String path, HashMap hm) {
 		this.path = path;
 		this.tileWidth = Tile.TILE_WIDTH;
 		this.tileHeight = Tile.TILE_HEIGHT;
-		
 		
 		try {
 			BufferedImage mapImage = ImageIO.read(new File(path)); 	// Loading an image to the memory
@@ -49,7 +52,7 @@ public class Map {
 
 	
 
-	
+	/**Creates a map for testing purposes. This should never be used in real application*/
 	public Map() {
 		this.width = 0;
 		this.height = 0;
@@ -215,7 +218,11 @@ public class Map {
 	 * @return return tile type
 	 */
 	public Tile getTile(Integer color){ return this.hashmap.get(color); }
+	
+	/**@return - Returns the tile width*/
 	public int getTileWidth() {return this.tileWidth;}
+	
+	/**@return - Returns the tile height*/
 	public int getTileHeight() {return this.tileHeight;}
 	
 }

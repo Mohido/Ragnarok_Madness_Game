@@ -7,8 +7,8 @@ import ragmad.entity.Entity;
  * @author Mohido
  *
  */
-public abstract class Item extends Entity{
-	protected double angle_r;	// the direction angle in radians 
+public abstract class Item extends Entity{ 
+	protected String itemName;
 	
 	/**
 	 * Defines the usage of an item over an Entity (Scene objects).
@@ -20,4 +20,9 @@ public abstract class Item extends Entity{
 	public void update() {}
 	
 	public void render() {}
+	
+	
+	public String toString() {
+		return itemName;
+	}
 }
