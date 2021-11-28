@@ -72,7 +72,7 @@ public abstract class Characters extends Entity {
 		int playerWidth = sprites.getWidth() ;
 		int playerHeight = sprites.getHeight();
 
-		int[] n = map.getTileAt(-x ,-y , (int)(GameScene.xOffset - (playerWidth/2) + dirX),(int) (GameScene.yOffset -  (playerHeight - 14)  + dirY));
+		int[] n = map.getTileAt(-(int)x ,-(int)y , (int)(GameScene.xOffset - (playerWidth/2) + dirX),(int) (GameScene.yOffset -  (playerHeight - 14)  + dirY));
 		if(n != null) {
 			if( map.tileExists(n[0], n[1])) {
 				solid = colorsMap.get(map.getMap()[(n[0])+ (n[1])*map.getWidth()]).isSolid();

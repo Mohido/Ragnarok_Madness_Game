@@ -8,6 +8,7 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 
 import ragmad.GameEngine;
+import ragmad.entity.item.Item;
 import ragmad.graphics.sprite.Sprite;
 
 
@@ -48,14 +49,6 @@ public class Map {
 
 	
 
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	public Map() {
 		this.width = 0;
@@ -188,8 +181,6 @@ public class Map {
 	    return null;
 	}
 	
-	
-	
 
 	/// ________________________________ GETTERS AREA ___________________________
 
@@ -224,6 +215,8 @@ public class Map {
 	 * @return return tile type
 	 */
 	public Tile getTile(Integer color){ return this.hashmap.get(color); }
+	public int getTileWidth() {return this.tileWidth;}
+	public int getTileHeight() {return this.tileHeight;}
 	
 }
 

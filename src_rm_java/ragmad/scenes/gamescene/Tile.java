@@ -142,7 +142,7 @@ public class Tile {
 	 */
 	private void renderBlock (Sprite sprite, int xCord, int yCord, int xOffset, int yOffset, int SCALING) {
 		int zPixels = zCord * SCALING; // should also response with the scaling factor
-		
+		 
 		int[] outputPixels = GameEngine.GetPixels();
 		int[] tilePixels = sprite.getPixels();
 		
@@ -174,7 +174,7 @@ public class Tile {
 			/*Height boundaries checking*/
 			if( yy >= GameEngine.GetHeight()) 
 				break;
-			
+			 
 			for(int x = 0 ; x < s_width; x++) {
 				int col = tilePixels[ x/SCALING + (y/SCALING) * sprite.getWidth() ];
 				int xx = x + xPixel;

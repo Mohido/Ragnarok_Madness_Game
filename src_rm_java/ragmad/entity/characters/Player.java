@@ -14,7 +14,7 @@ import ragmad.scenes.gamescene.Tile;
  * Player in the game
  */
 public class Player extends Characters {
-	
+	 
 	
 	private Sprite curSprite;
 	private int anim = 0;
@@ -26,24 +26,15 @@ public class Player extends Characters {
 	private int currentAnimationCol;
 	
 	
-//	public Player() {
-//		this.x = -GameEngine.GetWidth()/2;
-//		this.y = -GameEngine.GetHeight()/2;	
-//	}
-	
-	
-	
+	/**
+	 * A testing implementation for creating a spriteless player with no animation. Note that this will not work! It is only for testing purposes.
+	 * @param x - raster position of the player.
+	 * @param y - raster position of the player.
+	 */
 	public Player(int x, int y) {
-//		this.x = -GameEngine.GetWidth()/2 - x; // x is input as Positive for moving to the right and negative to the left
-//		this.y = -GameEngine.GetHeight()/2 - y;	 
-		
 		this.x = -x;
 		this.y = -y;
-		
-//		this.x = x;
-//		this.y = y;
 		curSprite = null;
-		//Tile.PLAYER = new Tile(0, Sprite.PLAYER_TILE_BACK_1, false);
 	}
 	
 	
@@ -77,16 +68,11 @@ public class Player extends Characters {
 	 * @param map the world map
 	 * */
 	public void update(int frameMovement, Map map) {
-
-		anim = (anim+1) & 7; 	// same as anim % 32. But much faster. This here is just an update counter really!
+		anim = (anim+1) & 7; 	// same as anim % 32. But much faster. This here is just an update counter that resets when it reaches 32.
 		if(anim == 0) {
-			this.currentAnimationCol = (currentAnimationCol + 1) % this.animationCols ; //& (this.animationCols - 1);
-		
+			this.currentAnimationCol = (currentAnimationCol + 1) % this.animationCols ;
 		}
-			
-		
-		 
-		
+
 		int xOffset = 0 ,  yOffset = 0;
 		if(Keyboard.isUp()) yOffset+=frameMovement;
 		if(Keyboard.isDown()) yOffset-=frameMovement;
@@ -103,6 +89,10 @@ public class Player extends Characters {
 		}else {
 			isWalking = false;
 		}
+		
+		/*NEXT: Check if player is in range with any of the items. And if it is, he can pick it up with pressing 'E'*/
+		
+		
 	}
 	
 	
@@ -124,8 +114,8 @@ public class Player extends Characters {
 
 		
 		
-		int xPixel = x;
-		int yPixel = y;
+		int xPixel = (int)x;
+		int yPixel = (int)y;
 		
 		
 		//System.out.println(xPixel + ", " + yPixel);
@@ -133,7 +123,7 @@ public class Player extends Characters {
 			int yy = y - yPixel;   //Mapping coordinates space to the GameEngine pixel Space (Raster space) //yOffset for vertical movement
 			if( yy >= GameEngine.GetHeight()) break;
 			if(yy < -s_height) break;
-			if(yy < 0) continue;
+			if(yy < 0) continue; 
 			for(int x = 0 ; x < s_width; x++) {
 				int xx = x - xPixel;
 				int col = tilePixels[x/SCALING + (y/SCALING) * curSprite.getWidth()]; // getting the pixel colour of the tile
