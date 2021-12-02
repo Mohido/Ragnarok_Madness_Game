@@ -2,11 +2,14 @@ package ragmad.scenes.gamescene;
 
 import ragmad.GameEngine;
 import ragmad.entity.characters.Player;
+import ragmad.entity.item.Item;
+import ragmad.entity.item.ItemCapsule;
 import ragmad.graphics.sprite.Sprite;
 import ragmad.io.Keyboard;
 import ragmad.io.Mouse;
 import ragmad.scenes.Scene;
 import java.lang.Math;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -20,40 +23,19 @@ public class GameScene implements Scene{
 	int frameMovement;
 	int m_width, m_height;
 	private Map map;
-	private Player player; ///--------------------------------><><><><<><><>
-	//private Keyboard input;
+	private Player player; 	
+	private ArrayList<ItemCapsule> itemCapsules; // Stores the items on the scene.
+	private final static int interactionRadiusSqr = 50*50;
+	
 	
 	/// _________________________ Constructor Area_________________________________
-	
-//	public GameScene(int width, int height) {
-//		this.m_height = height;
-//		this.m_width = width;
-//		xCord = 0; 
-//		yCord = 0;
-//		xOffset  = GameEngine.GetWidth()/2 ; 	//For testing change all offset variables to player.y
-//		yOffset = (GameEngine.GetHeight()/2);		//For testing change all offset variables to player.y
-//		this.map = new Map();
-//		player = new Player(GameEngine.GetWidth()/2, GameEngine.GetHeight()/2);
-//	}
-	
-	
-//	public GameScene(int width, int height, String mapPath) {
-//		this.m_height = height;
-//		this.m_width = width;
-//		xCord = 0;
-//		yCord = 0;
-//		xOffset  = GameEngine.GetWidth()/2 ; 	//For testing change all offset variables to player.y
-//		yOffset = GameEngine.GetHeight()/2;		//For testing change all offset variables to player.y
-//		hashmap=new HashMap<Integer, Tile>();
-//		this.hashmap.put( 0xff0032ff,Tile.PORTAL1);
-//		this.hashmap.put( 0xff8e4a4a,Tile.DESERT1);
-//		this.map = new Map(mapPath,hashmap); //Our map loaded from a file
-//
-//		player = new Player(GameEngine.GetWidth()/2, GameEngine.GetHeight()/2);
-//	}
-	
-	
-	
+	/**
+	 * Creates a game scene with the given parameters
+	 * @param width - visibility width
+	 * @param height - visibility height
+	 * @param map - map that defines the world
+	 * @param player - player to play in the scene.
+	 */
 	public GameScene(int width, int height, Map map, Player player) {
 		this.m_height = height;
 		this.m_width = width;
@@ -63,12 +45,40 @@ public class GameScene implements Scene{
 		yOffset = GameEngine.GetHeight()/2;		//For testing change all offset variables to player.y
 		this.map = map;
 		this.player = player;
+		
+		this.itemCapsules = new ArrayList<>(); 
 	}
 	
 	
 	
 	///___________________________ GameEngine component methods area _________________________________
 	
+	/**
+	 * Used to add a predefined item capsule directly to the scene. 
+	 * @param x_cord - Isometric X coordinate of the map.
+	 * @param y_cord - Isometric Y coordinate of the map.
+	 * @param item - the item we want to encapsulate
+	 * @param capsuleSprite - 
+	 */
+	public void addItemCapsule(int x_cord, int y_cord, Item item, Sprite capsuleSprite) {
+		/*Check if the item is in the correct range.*/
+		ItemCapsule it = new ItemCapsule(x_cord, y_cord,  capsuleSprite, item);
+		if( 0 <= it.getXCord() &&  it.getXCord() < this.map.getWidth() && 0 <= it.getYCord() &&  it.getYCord() < this.map.getHeight()) {
+			this.itemCapsules.add(it);
+		}
+	}
+	
+	
+	/**
+	 * Used to add a predefined item capsule directly to the scene. 
+	 * @param it - Item capsule to be added to the scene.
+	 */
+	public void addItemCapsule(ItemCapsule it) {
+		/*Check if the item is in the correct range.*/
+		if( 0 <= it.getXCord() &&  it.getXCord() < this.map.getWidth() && 0 <= it.getYCord() &&  it.getYCord() < this.map.getHeight()) {
+			this.itemCapsules.add(it);
+		}
+	}
 	
 	
 	
@@ -79,19 +89,38 @@ public class GameScene implements Scene{
 	public void update() {
 		frameMovement = 5;// (int)(5.0 *  (GameEngine.GetDelta())); /// <--- BUG: Delta Time is not set properly.
 		player.update(frameMovement, this.map);
-
-			/*if(Keyboard.isUp()) yOffset+=frameMovement;
-			if(Keyboard.isDown()) yOffset-=frameMovement;
-			if(Keyboard.isRight()) xOffset-=frameMovement;
-			if(Keyboard.isLeft()) xOffset+=frameMovement;*/
-
-		if (Keyboard.esc()) {
+		
+		if (Keyboard.esc()) { 
 			GameEngine.ChangeScene("Menu");
 		}
-
-		int[] testing = this.map.getTileAt(Mouse.x,Mouse.y,(int)xOffset,(int) yOffset);
-		if(testing == null) return;
 		
+		
+		int i = 0;
+		while(i < this.itemCapsules.size()) {
+			double xItemCenter = this.itemCapsules.get(i).x + (this.map.getTileWidth()>>1);
+			double yItemCenter = this.itemCapsules.get(i).y;
+			double xDist = (- this.player.x + 20) - xItemCenter;
+			xDist = xDist*xDist;
+			double yDist = (- this.player.y + 20) - yItemCenter;
+			yDist = yDist*yDist;
+			
+			double distanceSqr = xDist + yDist; 
+			boolean inItemRadius =  distanceSqr <= interactionRadiusSqr;
+			
+			if(Keyboard.equip() && inItemRadius) {
+				/*remove Item from the array list and equip it to the player*/
+				ItemCapsule itc = this.itemCapsules.remove(i);
+				Item it = itc.getItem();
+				this.player.addItem(it);
+			}else if(inItemRadius) { // tell user that he can equip an item.
+				System.out.println("ItemCapsule in range, press 'E' to equip.");
+				i++;
+			}
+			else {			
+				i++;
+			}
+			
+		}
 	}
 
 	
@@ -112,12 +141,23 @@ public class GameScene implements Scene{
 				if(anchorExists(x, y, t, id)) {
 					t.renderToRaster(x, y, (int)xOffset,(int) yOffset, SCALING);
 				}
-
 			}
 		}
+		
+		renderCapsules(); 
 		player.render(1);
-		//System.out.println("THe render is render");
-		//Tile.PLAYER2.renderPlayer(0,0, xOffset, yOffset, SCALING);
+	}
+	
+	/**
+	 * Helper function that helps in encapsulating the rendering process ofo the item capsules.
+	 * */
+	private void renderCapsules() {
+		for(int i = 0; i < this.itemCapsules.size(); i++) {
+			/*Updating the render positioning regarding offset before rendering.*/
+			this.itemCapsules.get(i).updateXY((int)this.xOffset,(int)this.yOffset, this.map.getTileWidth(), this.map.getTileHeight());
+			/*Rendering phase*/
+			this.itemCapsules.get(i).render();
+		}
 	}
 	
 	
@@ -134,14 +174,16 @@ public class GameScene implements Scene{
 	}
 	
 	
-	
+	/**
+	 * Zooming in is used to scale the view. Zooming into the game.
+	 */
 	public static void zoomIn() { SCALING = (SCALING < 2 )? SCALING + 1 : 2 ;}
+	
+	/**
+	 * Zooming out is used to scale out the view. Zooming out of the game.
+	 */
 	public static void zoomOut() { SCALING = (SCALING > 1 )? SCALING - 1 : 1 ;}
 	
 	
 	
 }
-
-
-
-//keyboard shortkey

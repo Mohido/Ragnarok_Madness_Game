@@ -4,6 +4,7 @@ import java.nio.file.Paths;
 
 import ragmad.graphics.sprite.Sprite;
 import ragmad.io.Keyboard;
+import ragmad.io.Mouse;
 import ragmad.scenes.Scene;
 import ragmad.scenes.gamescene.GameScene;
 import ragmad.scenes.gamescene.Tile;
@@ -84,6 +85,7 @@ public class GameEngine implements Runnable {
 	private void update() {
 		this.currentScene.update();
 		this.window.update();
+		Mouse.ClearMouse();
 	}
 	
 	
