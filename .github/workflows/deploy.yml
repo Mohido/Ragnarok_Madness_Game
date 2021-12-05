@@ -1,0 +1,30 @@
+# .github/workflows/deploy.yml
+name: Deploy
+on:
+  push:
+    branches: [test-development ]
+  pull_request:
+    branches: [test-development]
+  workflow_dispatch:
+jobs:
+  my_job:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Archive files
+        run: |
+          sudo apt-get update
+          sudo apt-get install zip
+          zip -r archive.zip *
+      - name: Upload to gdrive
+        uses: adityak74/google-drive-upload-git-action@main
+        with:
+          credentials: ${{ secrets.CREDENTIALS }}
+          filename: "archive.zip"
+          folderId: ${{ secrets.FOLDERID }}
+          name: "documentation.zip" # optional string
+          overwrite: "true" # optional boolean
