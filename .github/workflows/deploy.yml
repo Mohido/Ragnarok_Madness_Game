@@ -51,7 +51,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install zip
-          zip -r archive.zip bin/ragnarok-madness.jar
+          cd bin
+          zip -r archive.zip ragnarok-madness.jar
           
       - name: Upload to gdrive
         uses: adityak74/google-drive-upload-git-action@main
