@@ -26,5 +26,6 @@ jobs:
           credentials: ${{ secrets.CREDENTIALS }}
           filename: "archive.zip"
           folderId: ${{ secrets.FOLDERID }}
-          name: "documentation.zip" # optional string
-          overwrite: "true" # optional boolean
+          name: "ragnorarok_build_v1.${{ github.run_id }}.zip" # optional string
+          overwrite: "false" # optional boolean
+
