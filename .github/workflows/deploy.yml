@@ -45,20 +45,21 @@ jobs:
         run : |
           cd bin/
           ls -a         
+      - name: checking all folders
+        run : ls  
 
-
-      - name: Archive files
-        run: |
-          sudo apt-get update
-          sudo apt-get install zip
-          zip -j archive.zip bin/ragnarok-madness.jar
+#       - name: Archive files
+#         run: |
+#           sudo apt-get update
+#           sudo apt-get install zip
+#           zip -j archive.zip bin/ragnarok-madness.jar
           
-      - name: Upload to gdrive
-        uses: adityak74/google-drive-upload-git-action@main
-        with:
-          credentials: ${{ secrets.CREDENTIALS }}
-          filename: "archive.zip"
-          folderId: ${{ secrets.FOLDERID }}
-          name: "ragnorarok_build_v1.${{ github.run_id }}.zip" # optional string
-          overwrite: "false" # optional boolean
+#       - name: Upload to gdrive
+#         uses: adityak74/google-drive-upload-git-action@main
+#         with:
+#           credentials: ${{ secrets.CREDENTIALS }}
+#           filename: "archive.zip"
+#           folderId: ${{ secrets.FOLDERID }}
+#           name: "ragnorarok_build_v1.${{ github.run_id }}.zip" # optional string
+#           overwrite: "false" # optional boolean
 
