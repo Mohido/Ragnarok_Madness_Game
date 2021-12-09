@@ -28,7 +28,7 @@ public class Map {
 	/**
 	 * Creating a map.
 	 * @param path - Paths of the map IDs
-	 * @param hm - Hashmap which defines the ID -> Tile relation.
+	 * @param hm - Hashmap which defines the ID and Tile relation.
 	 */
 	public Map(String path, HashMap hm) {
 		this.path = path;

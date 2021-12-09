@@ -37,16 +37,39 @@ public class Game {
 	final SpriteSheet DESERT_SHEET = new SpriteSheet(Paths.get("").toAbsolutePath().getParent()  +  "/res/desert_res_orig.png");
 	final SpriteSheet PORTAL_SHEET = new SpriteSheet(Paths.get("").toAbsolutePath().getParent()  + "/res/porotals.png");
 	final SpriteSheet PLAYER_SHEET = new SpriteSheet( Paths.get("").toAbsolutePath().getParent() + "/res/jaden_yuki_2.png");
+	final SpriteSheet GRASS_SHEET = new SpriteSheet( Paths.get("").toAbsolutePath().getParent() + "/res/grass.png");
+	final SpriteSheet GRAVE_SHEET = new SpriteSheet( Paths.get("").toAbsolutePath().getParent() + "/res/grave2.png");
+	final SpriteSheet WATER_MOUNTAIN_SHEET = new SpriteSheet( Paths.get("").toAbsolutePath().getParent() + "/res/water_mountain3.png");
+	final SpriteSheet WATER_SHEET = new SpriteSheet( Paths.get("").toAbsolutePath().getParent() + "/res/water.png");
+	final SpriteSheet FIRE_SHEET = new SpriteSheet( Paths.get("").toAbsolutePath().getParent() + "/res/fire.png");
+	final SpriteSheet CROSS_SHEET = new SpriteSheet( Paths.get("").toAbsolutePath().getParent() + "/res/symbol.png");
 	final SpriteSheet CAPSULE_SHEET = new SpriteSheet( Paths.get("").toAbsolutePath().getParent() + "/res/capsules.png");
 	final SpriteSheet BULLET_SHEET = new SpriteSheet( Paths.get("").toAbsolutePath().getParent() + "/res/bullet1.png");
 
-	
+
 	/*Loading Sprites*/
-	final Sprite DESERT_TILE_1 = new Sprite(DESERT_SHEET, 0, 0, 64, 32);
-	final Sprite DESERT_TILE_2 = new Sprite(DESERT_SHEET, 0, 1, 64, 32);
-	final Sprite PORTAL_TILE_1 = new Sprite(PORTAL_SHEET, 0, 0, 128, 64, -1, 1, 0);
+	
 	final Sprite CAPSULE_1 = new Sprite(CAPSULE_SHEET, 0, 0, 32, 32);
 	final Sprite BULLET_1 = new Sprite(BULLET_SHEET, 0, 0, 16, 16);
+	
+	final Sprite DESERT_TILE_1 = new Sprite(DESERT_SHEET, 0, 0, 64, 32);
+	final Sprite DESERT_TILE_2 = new Sprite(DESERT_SHEET, 0, 1, 64, 32);
+	
+	final Sprite WATER_TILE_1 = new Sprite(WATER_SHEET, 0, 0, 64, 32);
+	final Sprite FIRE_TILE_1 = new Sprite(FIRE_SHEET, 0, 0, 64, 32);
+
+	final Sprite GRASS_TILE_1 = new Sprite(GRASS_SHEET, 0, 0, 64, 32);
+	
+	final Sprite GRAVE_TILE_1 = new Sprite(GRAVE_SHEET, 0, 0, 64, 32);
+
+	final Sprite PORTAL_TILE_1 = new Sprite(PORTAL_SHEET, 0, 0, 128, 64, -1, 1, 0);
+	final Sprite PORTAL_TILE_2 = new Sprite(PORTAL_SHEET, 1, 0, 128, 64, -1, 1, 0);
+	final Sprite PORTAL_TILE_3 = new Sprite(PORTAL_SHEET, 2, 0, 128, 64, -1, 1, 0);
+	final Sprite PORTAL_TILE_4 = new Sprite(PORTAL_SHEET, 3, 0, 128, 64, -1, 1, 0);
+
+	final Sprite WATER_MOUNTAIN_TILE_1 = new Sprite(WATER_MOUNTAIN_SHEET, 0, 0, 192, 96, 1,0 , 0);
+	//final Sprite CROSS_TILE_1 = new Sprite(CROSS_SHEET, 0, 0, 64, 64, -1, 1, 0);
+	
 
 	/**
 	 * Here we load all the GameProperties and initializes the Game engine.
@@ -65,6 +88,8 @@ public class Game {
 		//Creates a GameScene
 		GameScene gameScene = initGameScene(player);
 		gameScene.zoomIn();
+		
+		
 		gameScene.addItemCapsule(1, 0, new WeaponItem("Corruption Pistol", 10, BULLET_1, 5), CAPSULE_1);
 		
 		// Creates a Main Menu
@@ -80,7 +105,7 @@ public class Game {
 		engine.InitMainMenu(mainMenu);
 		engine.ChangeScene("Menu");
 		
-		engine.start(); 
+		engine.start();
 		
 	}
 
@@ -104,10 +129,25 @@ public class Game {
 	private GameScene initGameScene(Player player) {
 		// Initialize GameScene.
 		HashMap<Integer, Tile> colorMap = new HashMap<Integer, Tile>();
-		colorMap.put( 0xff0032ff, new Tile(0, PORTAL_TILE_1, true));
-		colorMap.put( 0xff8e4a4a, new Tile(0, DESERT_TILE_1, false));
 		
-		String mapPath =  Paths.get("").toAbsolutePath().getParent()  +  "/res/map4.png";
+		colorMap.put( 0xffe900f7, new Tile(0, PORTAL_TILE_1, true));
+		colorMap.put( 0xffa322ab, new Tile(0, PORTAL_TILE_2, true));
+		colorMap.put( 0xff4c214f, new Tile(0, PORTAL_TILE_3, true));
+		colorMap.put( 0xff6a1f6f, new Tile(0, PORTAL_TILE_4, true));
+
+
+		colorMap.put( 0xff5b6065, new Tile(0, WATER_MOUNTAIN_TILE_1, true));
+		colorMap.put( 0xff7bc0ee, new Tile(0, WATER_TILE_1, true));
+		colorMap.put( 0xffcfe16d, new Tile(0, FIRE_TILE_1, true));
+
+		
+		colorMap.put( 0xff4caf50, new Tile(0, GRASS_TILE_1, false));
+		colorMap.put( 0xff242323, new Tile(0, GRAVE_TILE_1, true));
+		colorMap.put( 0xfff70000, new Tile(40, DESERT_TILE_2, true));
+
+		colorMap.put( 0xff8e4a4a, new Tile(0, DESERT_TILE_1, false));
+		 
+		String mapPath =  Paths.get("").toAbsolutePath().getParent()  +  "/res/temp20.png";
 		Map map = new Map(mapPath, colorMap);
 		
 		return new GameScene(GameEngine.GetWidth(), GameEngine.GetHeight(), map, player);
