@@ -62,7 +62,6 @@ jobs:
           name: "ragnorarok_build_v1.${{ github.run_number }}.commit-number:${{ github.sha }}.zip" # optional string
           overwrite: "false" # optional boolean
       
-      - name: Saving the link in a file
       - run: echo -n -e "HELLO\n !\n World!" > text.txt
       - uses: pCYSl5EDgo/cat@master
         id: hello
