@@ -104,7 +104,7 @@ public class Game {
 		gameScene.addNPC(foe1);
 		gameScene.addNPC(foe2);
 		gameScene.zoomIn();
-		gameScene.addItemCapsule(1, 0, new WeaponItem("Corruption Pistol", 10, BULLET_1, 0.075, 5, 1), CAPSULE_1);
+		gameScene.addItemCapsule(3, 1, new WeaponItem("Corruption Pistol", 10, BULLET_1, 0.075, 5, 1), CAPSULE_1);
 		
 		// Creates a Main Menu
 		MainMenu mainMenu = initMainMenu();
