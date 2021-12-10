@@ -41,12 +41,11 @@ public class GameScene implements Scene{
 	public GameScene(int width, int height, Map map, Player player) {
 		this.m_height = height;
 		this.m_width = width;
-		xCord = 0;
-		yCord = 0;
-		xOffset = GameEngine.GetWidth()/2; 		//For testing change all offset variables to player.y
-		yOffset = GameEngine.GetHeight()/2;		//For testing change all offset variables to player.y
-		this.map = map;
 		this.player = player;
+		xOffset = GameEngine.GetWidth()/2 - this.player.getX(); 		//For testing change all offset variables to player.y
+		yOffset = GameEngine.GetHeight()/2 - this.player.getY();		//For testing change all offset variables to player.y
+		this.map = map;
+		
 		this.foes = new ArrayList();
 		this.itemCapsules = new ArrayList<>(); 
 	}
@@ -89,8 +88,11 @@ public class GameScene implements Scene{
 	 */
 	@Override
 	public void update() {
-		frameMovement = 5;// (int)(5.0 *  (GameEngine.GetDelta())); /// <--- BUG: Delta Time is not set properly.
+		frameMovement = 5;
 		player.update(frameMovement, this.map);
+		this.updateOffset();
+		
+		
 		for(int i = 0; i < foes.size() ;i++) { this.foes.get(i).update();}
 		
 		
@@ -190,7 +192,15 @@ public class GameScene implements Scene{
 	public static void zoomOut() { SCALING = (SCALING > 1 )? SCALING - 1 : 1 ;}
 
 
-
+	public void updateOffset() {
+		xOffset = this.player.getX() ; 		//+ GameEngine.GetWidth()/2 For testing change all offset variables to player.y
+		yOffset = this.player.getY() ;		//+ GameEngine.GetHeight()/2  For testing change all offset variables to player.y
+		
+		//System.out.println("Player: " +  this.player.getXCord() + " " + this.player.getYCord());
+		//System.out.println("scene: " +  (int)xOffset + " " + (int)yOffset);
+	}
+	
+	
 	public void addNPC(Foe yugi) {this.foes.add(yugi);}
 	
 	

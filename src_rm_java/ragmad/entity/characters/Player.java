@@ -23,7 +23,7 @@ public class Player extends Characters {
 	private Sprite curSprite;
 	private int anim = 0;
 	private boolean isWalking = false;
-	private double xCord, yCord;
+
 	int animationRows, animationCols;
 	private Sprite[] animationSprites;
 	private HashMap<Direction, Integer> spriteMap;
@@ -53,9 +53,11 @@ public class Player extends Characters {
 	 * @param animationsPerType - This is the count of animations we do have per each direction. E.G: 'animationsPerType = 4' means that we have 4 different animations for walking on a specific direction. Note that all directions will have the same count of animations.
 	 * @param spriteMap - This is a map that maps a Direction to a sprite Row (Animation Type). Note that it relies that the animationSprites contiguous sprites.
 	 */
-	public Player(int x, int y, Sprite[] animationSprites, int animationTypes, int animationsPerType,  HashMap<ragmad.entity.characters.Direction, Integer> spriteMap) {
-		this.x = -x; 
-		this.y = -y;
+	public Player(int xCord, int yCord, Sprite[] animationSprites, int animationTypes, int animationsPerType,  HashMap<ragmad.entity.characters.Direction, Integer> spriteMap) {
+		this.xCord = xCord; 
+		this.yCord = yCord;
+		setRasterPosFromCord();
+		 
 		this.currentAnimationCol = 0;
 		this.spriteMap = spriteMap;
 		this.animationSprites = animationSprites;
@@ -76,14 +78,17 @@ public class Player extends Characters {
 		if(anim == 0) {
 			this.currentAnimationCol = (currentAnimationCol + 1) % this.animationCols ;
 		}
-
+		//System.out.println("Player1: " + xCord + " " + yCord);
+		setRasterPosFromCord();
 		int xOffset = 0 ,  yOffset = 0;
-		if(Keyboard.isUp()) yOffset+=frameMovement;
-		if(Keyboard.isDown()) yOffset-=frameMovement;
-		if(Keyboard.isRight()) xOffset-=frameMovement;
-		if(Keyboard.isLeft()) xOffset+=frameMovement;
+//		if(Keyboard.isUp()) yOffset+=frameMovement;
+//		if(Keyboard.isDown()) yOffset-=frameMovement;
+//		if(Keyboard.isRight()) xOffset-=frameMovement;
+//		if(Keyboard.isLeft()) xOffset+=frameMovement;
 		double modifiedDirX = 0;
 		double modifiedDirY = 0;
+		 
+		//this.yCord += 0.1;
 		
 		if(xOffset != 0 || yOffset != 0) {
 			double temp = Math.sqrt(xOffset*xOffset + yOffset*yOffset);
@@ -98,7 +103,6 @@ public class Player extends Characters {
 		}else {
 			isWalking = false;
 		}
-		
 		/*Shoot if mouse is pressed*/ 
 		if(Mouse.buttonNum == 1 && this.inventory.size() > 0 && inventory.get(0) instanceof WeaponItem) {
 			double angle_r = Math.atan2(Mouse.y - (GameEngine.GetHeight()>>1), Mouse.x - (GameEngine.GetWidth() >> 1) );
@@ -124,6 +128,8 @@ public class Player extends Characters {
 	 * @param SCALING the scaling rate of the player
 	 * */
 	public void render(int SCALING) {
+		setRasterPosFromCord();
+		setRasterPosFromCord();
 		int[] outputPixels = GameEngine.GetPixels();
 		int[] tilePixels = curSprite.getPixels();
 		
@@ -132,7 +138,8 @@ public class Player extends Characters {
 
 		int xPixel = (int)x;
 		int yPixel = (int)y;
-
+		//System.out.println("rendering player at: " + xPixel + " " + yPixel);
+		
 		for(int y = 0 ; y < s_height; y++) {
 			int yy = y - yPixel;   //Mapping coordinates space to the GameEngine pixel Space (Raster space) //yOffset for vertical movement
 			if( yy >= GameEngine.GetHeight()) break;
@@ -155,20 +162,23 @@ public class Player extends Characters {
 		if( this.inventory.size() > 0 && inventory.get(0) instanceof WeaponItem) {
 			((WeaponItem)this.inventory.get(0)).render();
 		}
+		
 	}
 
 
 	
-//	private void cordToRaster() {
-//		int normal_height =  Tile.TILE_HEIGHT*GameScene.SCALING;
-//		int normal_width = Tile.TILE_WIDTH*GameScene.SCALING;
-//		int n_width_half = normal_width >> 1;
-//		int n_height_half = normal_height >> 1;
-//
-//		/*Foe pixel coordinates*/
-//		this.x = (-yCord * n_width_half - xCord * n_width_half - GameScene.xOffset);
-//		this.y = (-yCord * n_height_half + xCord * n_height_half -  GameScene.yOffset);
-//	}
+	private void setRasterPosFromCord() {
+		int normal_height =  Tile.TILE_HEIGHT;
+		int normal_width = Tile.TILE_WIDTH;
+		int n_width_half = normal_width >> 1;
+		int n_height_half = normal_height >> 1;
+		
+		System.out.println("Player: " + xCord + " " + yCord);
+		/*Foe pixel coordinates*/
+		this.x = -(+yCord * n_width_half + xCord * n_width_half);
+		this.y = (-yCord * n_height_half + xCord * n_height_half);
+		System.out.println("Mapped to: " + this.x + " " + this.y);
+	}
 	
 	
 	
@@ -181,5 +191,10 @@ public class Player extends Characters {
 		System.out.println("Added Item: " + it.toString());
 		this.inventory.add(it);
 	}
+	
+	public double getX() {return this.x; }
+	public double getY() {return this.y; }
+	public double getXCord() {return this.xCord*GameScene.SCALING;}
+	public double getYCord() {return this.yCord*GameScene.SCALING;}
 	
 }

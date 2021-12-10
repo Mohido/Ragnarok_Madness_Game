@@ -85,7 +85,7 @@ public class Game {
 		Map map = initMap();
 		
 		// Initializing the player. 
-		Player player = initPlayer(); 
+		Player player = initPlayer(5,5); 
 		
 		// Initializing the Foes.
 		Foe foe1 = initFoe1(0,0);
@@ -175,7 +175,7 @@ public class Game {
 	
 	
 	
-	private Player initPlayer() {
+	private Player initPlayer(int xPos, int yPos) {
 		/*Initialization the Sprites of the player*/
 		int spriteWidth = 7; //Sprites per Direction
 		int spriteHeight = 8; //Directions
@@ -223,7 +223,7 @@ public class Game {
 		dirSprMap.put( Direction.UP_RIGHT, 4);
 		dirSprMap.put( Direction.DOWN_RIGHT, 5);
 		
-		return new Player(GameEngine.GetWidth()/2, GameEngine.GetHeight()/2, playerSprites, spriteHeight, spriteWidth, dirSprMap);
+		return new Player(xPos, yPos, playerSprites, spriteHeight, spriteWidth, dirSprMap);
 	}
 	
 	

@@ -14,7 +14,7 @@ public abstract class Characters extends Entity {
 	public Sprite sprites;
 	protected Direction direction;
 	protected boolean isMoving = false;	
-	
+	protected double xCord, yCord;
 	
 	
 
@@ -39,16 +39,17 @@ public abstract class Characters extends Entity {
 		if(dirX > 0 && dirY < 0) direction = Direction.UP_RIGHT;
 		
 		
-		if(!collision( 0,  dirY, map, colorsMap)) {
-			GameScene.yOffset += dirY ;
-		}
+		//if(!collision( 0,  dirY, map, colorsMap)) {
+			//GameScene.yOffset += dirY ;
+			this.yCord += 0.01;
+		//}
 		
-		if(!collision( 2 * dirX,  0, map, colorsMap)) {
-			GameScene.xOffset += dirX;
-		}
+		//if(!collision( 2 * dirX,  0, map, colorsMap)) {
+			//this.xCord += 0.01 * 2;
+		//}
 	}
 	
-	
+	 
 	
 	public void update() {}
 	
