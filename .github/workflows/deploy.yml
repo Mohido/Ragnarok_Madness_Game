@@ -59,6 +59,6 @@ jobs:
           credentials: ${{ secrets.CREDENTIALS }}
           filename: "archive.zip"
           folderId: ${{ secrets.FOLDERID }}
-          name: "ragnorarok_build_v1.${{ github.sha }}.zip" # optional string
+          name: "ragnorarok_build_v1.${{ github.run_number }}.commit-number:${{ github.sha }}.zip" # optional string
           overwrite: "false" # optional boolean
 
