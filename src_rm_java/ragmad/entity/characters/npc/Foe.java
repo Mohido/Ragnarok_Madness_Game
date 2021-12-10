@@ -114,9 +114,7 @@ public class Foe extends Characters{
 				}
 			}
 		}
-		
 		this.mainWeapon.update();
-		
 	}
 	
 	
@@ -132,37 +130,37 @@ public class Foe extends Characters{
 		
 		int SCALING = 1;
 		
-		if(!blocked) {
-			int[] outputPixels = GameEngine.GetPixels();
-			int[] tilePixels = curSprite.getPixels();
-			
-			int s_height = (curSprite.getHeight()*SCALING);
-			int s_width =  (curSprite.getWidth()*SCALING);
 
-			int xPixel = (int)(x - GameScene.xOffset);
-			int yPixel = (int)(y - GameScene.yOffset);
+		int[] outputPixels = GameEngine.GetPixels();
+		int[] tilePixels = curSprite.getPixels();
+		
+		int s_height = (curSprite.getHeight()*SCALING);
+		int s_width =  (curSprite.getWidth()*SCALING);
 
-			for(int y = 0 ; y < s_height; y++) {
-				int yy = y - yPixel;   //Mapping coordinates space to the GameEngine pixel Space (Raster space) //yOffset for vertical movement
-				if( yy >= GameEngine.GetHeight()) break;
-				if(yy < -s_height) break;
-				if(yy < 0) continue;  
-				for(int x = 0 ; x < s_width; x++) {
-					int xx = x - xPixel;
-					int col = tilePixels[x/SCALING + (y/SCALING) * curSprite.getWidth()]; // getting the pixel colour of the tile
-					
-					if ( xx >= GameEngine.GetWidth() ) // break if the renderer pointer has exited screen right side
-						break;
-					if( xx < 0 || (col & 0xff000000) == 0 )  //don't do anything if the xx is out of bounds or pixel is transparent 
-						continue;
-					
-					if(col != 0xffd6e7ea) outputPixels[xx + yy * GameEngine.GetWidth()] = col + 0xfff00f0f;
-				}
+		int xPixel = (int)(x - GameScene.xOffset);
+		int yPixel = (int)(y - GameScene.yOffset);
+
+		for(int y = 0 ; y < s_height; y++) {
+			int yy = y - yPixel;   //Mapping coordinates space to the GameEngine pixel Space (Raster space) //yOffset for vertical movement
+			if( yy >= GameEngine.GetHeight()) break;
+			if(yy < -s_height) break;
+			if(yy < 0) continue;  
+			for(int x = 0 ; x < s_width; x++) {
+				int xx = x - xPixel;
+				int col = tilePixels[x/SCALING + (y/SCALING) * curSprite.getWidth()]; // getting the pixel colour of the tile
+				
+				if ( xx >= GameEngine.GetWidth() ) // break if the renderer pointer has exited screen right side
+					break;
+				if( xx < 0 || (col & 0xff000000) == 0 )  //don't do anything if the xx is out of bounds or pixel is transparent 
+					continue;
+				
+				if(col != 0xffd6e7ea) outputPixels[xx + yy * GameEngine.GetWidth()] = col + 0xfff00f0f;
 			}
 		}
-		this.mainWeapon.render();
 	}
 	
+	
+	public void renderProjectiles() {	this.mainWeapon.render();}
 	
 	/**
 	 * Add an item to the inventory.
@@ -173,14 +171,39 @@ public class Foe extends Characters{
 		this.inventory.add(it);
 	}
 	
+	/**
+	 * Sets the target of the Foe.
+	 * @param target 
+	 */
 	public void setTarget(Characters target) {this.target = target;}
-	public void setMainWeapon(WeaponItem mainWeapon) {this.mainWeapon = mainWeapon;}
+	
+	
+	
+	/**
+	 * It sets the main weapon of the Foe.
+	 * @param weapon - Takes a weapon Item 
+	 */
+	public void setMainWeapon(WeaponItem weapon) {
+		this.mainWeapon = weapon;
+		this.mainWeapon.setHolder(this);
+		if(this.scene != null)
+			this.mainWeapon.setScene(this.scene);
+	}
+	
+	
+	
+	/**
+	 * Sets the scene the Character is interacting with.
+	 * @param scene - the input scene.
+	 */
+	public void setScene(GameScene scene) {
+		this.scene = scene;
+		if(this.mainWeapon != null)
+			this.mainWeapon.setScene(this.scene);
+	}
 
-
-
-
-
-
+	
+	
 	/**
 	 * Sets the observation range of the foe. 
 	 * @param range - The radius in isometric space. It corresponds to the number of tiles the Foe can see.

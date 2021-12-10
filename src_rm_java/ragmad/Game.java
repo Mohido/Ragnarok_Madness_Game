@@ -81,29 +81,30 @@ public class Game {
 		
 		// Initializing the player. 
 		Player player = initPlayer(3,1); 
+		//player.setMainWeapon(new WeaponItem("Corruption Pistol", 20, BULLET_1, 0.05, 4));
 		player.setMap(map);
 		
 		
 		// Initializing the Foe1.
-		Foe foe1 = initFoe1(2,2);
+		Foe foe1 = initFoe1(2,8);
 		foe1.setTarget(player);
 		foe1.setVisualRange(3, true);
 		foe1.setMap(map);
 		
 		// Initializing the Foe2.
-		Foe foe2 = initFoe1(5,6);
+		Foe foe2 = initFoe1(5,8);
 		foe2.setTarget(player);
 		foe2.setVisualRange(3, true);
 		foe2.setMap(map);
 		
 		
 		//Creates a GameScene
-		GameScene gameScene = initGameScene(player,map);
+		GameScene gameScene = initGameScene(map);
+		gameScene.setPlayer(player);
 		gameScene.addNPC(foe1);
 		gameScene.addNPC(foe2);
 		gameScene.zoomIn();
-		
-		gameScene.addItemCapsule(1, 0, new WeaponItem("Corruption Pistol", 10, BULLET_1, 5, 5), CAPSULE_1);
+		gameScene.addItemCapsule(1, 0, new WeaponItem("Corruption Pistol", 10, BULLET_1, 0.075, 5, 1), CAPSULE_1);
 		
 		// Creates a Main Menu
 		MainMenu mainMenu = initMainMenu();
@@ -179,8 +180,8 @@ public class Game {
 	 * @param map - Map object.
 	 * @return GameScene object which it can be attached to the GameEngine object.
 	 */
-	private GameScene initGameScene(Player player, Map map) {
-		return new GameScene(GameEngine.GetWidth(), GameEngine.GetHeight(), map, player);	
+	private GameScene initGameScene(Map map) {
+		return new GameScene(GameEngine.GetWidth(), GameEngine.GetHeight(), map);	
 	}
 	
 	
@@ -294,7 +295,7 @@ public class Game {
 		dirSprMap.put( Direction.DOWN_RIGHT, 5);
 		
 		Foe f =  new Foe(xPos, yPos, playerSprites, spriteHeight, spriteWidth, dirSprMap);
-		f.setMainWeapon(new WeaponItem("FoeGun", 5, BULLET_1 , 0.05, 5));
+		f.setMainWeapon(new WeaponItem("FoeGun", 5, BULLET_1 , 0.05, 5, 1));
 		return f;
 	}
 	

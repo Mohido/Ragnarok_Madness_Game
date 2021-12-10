@@ -1,6 +1,9 @@
 package ragmad.entity.characters;
 
+import ragmad.scenes.gamescene.GameScene;
 import ragmad.scenes.gamescene.Map;
+import ragmad.scenes.gamescene.Tile;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import ragmad.GameEngine;
@@ -24,6 +27,7 @@ public class Player extends Characters {
 	private int currentAnimationCol;
 
 	private ArrayList<Item> inventory; /// Inventory is a bag. It stores different kind of items. However, for the simplicity, we are taking first picked item as a weaponItem .
+	private WeaponItem mainWeapon; 
 	
 	/**
 	 * A testing implementation for creating a spriteless player with no animation. Note that this will not work! It is only for testing purposes.
@@ -72,7 +76,7 @@ public class Player extends Characters {
 	 * @param frameMovement the movement of the character by pixels
 	 * @param map the world map
 	 * */
-	public void update(int frameMovement, Map map) {
+	public void update() {
 		setRasterPosFromCord(this.curSprite.getWidth()/2, this.curSprite.getHeight()/2);
 		
 		anim = (anim+1) & 7; 	// same as anim % 32. But much faster. This here is just an update counter that resets when it reaches 32.
@@ -116,15 +120,19 @@ public class Player extends Characters {
 		}
 		
 		/*Shoot if mouse is pressed*/ 
-		if(Mouse.buttonNum == 1 && this.inventory.size() > 0 && inventory.get(0) instanceof WeaponItem) {
-			double angle_r = Math.atan2(Mouse.y - ((int)GameEngine.GetHeight()>>1), Mouse.x - (GameEngine.GetWidth()>>1) );
-			((WeaponItem)inventory.get(0)).shoot(angle_r, (int)GameEngine.GetWidth()>>1, (int)GameEngine.GetHeight()>>1);
-		} 
+		if(Mouse.buttonNum == 1 && this.mainWeapon != null) {
+			/*Raster to isometric space (Does not consider the heights of the tile.)*/
+			double localX = ( (Mouse.y - GameScene.yOffset) / Tile.TILE_HEIGHT + (Mouse.x - GameScene.xOffset) / Tile.TILE_WIDTH) / 2 ;
+			double localY = -((Mouse.y - GameScene.yOffset) / Tile.TILE_HEIGHT - (Mouse.x - GameScene.xOffset) /  Tile.TILE_WIDTH) / 2;
+			
+			/*Shooting toward that direction.*/
+			double angle_r = Math.atan2(  localX - this.yCord,  localY - this.xCord );
+			this.mainWeapon.shoot(angle_r, this.xCord, this.yCord);
+		}  
 		
 		/*update projectiles*/
-		if( this.inventory.size() > 0 && inventory.get(0) instanceof WeaponItem) { 
-			//((WeaponItem)this.inventory.get(0)).offsetChange(modifiedDirX, modifiedDirY); // if player moves, offset the projectiles
-			((WeaponItem)this.inventory.get(0)).update();  // update projectiles movement.
+		if( this.mainWeapon != null) { 
+			this.mainWeapon.update();  
 		}
 	} 
 	
@@ -136,6 +144,9 @@ public class Player extends Characters {
 	 * @param SCALING the scaling rate of the player
 	 * */
 	public void render(int SCALING) {
+		
+		/*Rendering the player.*/
+	
 		int[] outputPixels = GameEngine.GetPixels();
 		int[] tilePixels = curSprite.getPixels();
 		
@@ -163,12 +174,6 @@ public class Player extends Characters {
 				if(col != 0xffd6e7ea) outputPixels[xx + yy * GameEngine.GetWidth()] = col;
 			}
 		}
-		
-		/*Render projectiles*/
-		if( this.inventory.size() > 0 && inventory.get(0) instanceof WeaponItem) {
-			((WeaponItem)this.inventory.get(0)).render();
-		}
-		
 	}
 
 	
@@ -177,5 +182,34 @@ public class Player extends Characters {
 	 * Add an item to the inventory.
 	 * @param it - The item wanted to be added to the inventory (Picked up Item)
 	 */
-	public void addItem(Item it) {this.inventory.add(it);}
+	public void addItem(Item it) {
+		this.inventory.add(it);
+		if(this.mainWeapon == null && it instanceof WeaponItem) {
+			setMainWeapon((WeaponItem)it);
+		}
+	}
+	
+	
+	public void setMainWeapon(WeaponItem weapon) {
+		this.mainWeapon = weapon;
+		this.mainWeapon.setHolder(this);
+		if(this.scene != null)
+			this.mainWeapon.setScene(this.scene);
+	}
+	
+	public void setScene(GameScene scene) {
+		this.scene = scene;
+		if(this.mainWeapon != null)
+			this.mainWeapon.setScene(this.scene);
+	}
+
+
+	public void renderProjectiles() {
+		/*Render projectiles*/
+		if(this.mainWeapon != null) {
+			this.mainWeapon.render();
+		}
+	}
+	
+
 }

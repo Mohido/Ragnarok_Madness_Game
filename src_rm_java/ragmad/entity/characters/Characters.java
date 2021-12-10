@@ -18,6 +18,7 @@ public abstract class Characters extends Entity {
 	protected double speed;
 	protected Map map;
 	protected int health;
+	protected GameScene scene;
 	
 	
 	
@@ -81,4 +82,13 @@ public abstract class Characters extends Entity {
 	public Direction getDirection() {return direction;}
 	public void setMap(Map map) { this.map = map;}
 	public void setHealth(int health) { this.health = health;}
+	
+	public int getHealth() {return this.health;}
+ 
+	public void hit(int damage) {
+		System.out.println("Character hit with daamge: " + damage);
+		this.health -= damage;
+		this.health = Math.max(this.health, 0); // clamping
+	}
+	
 }

@@ -51,7 +51,7 @@ public class Bullet extends Entity{
 	public void update() {
 		this.xCord += speed*xUnit;
 		this.yCord += speed*yUnit;
-		
+		//System.out.println("Update projectile at: " + xCord + " " + yCord);
 		this.outOfRange = ((xCord-xStart)*(xCord-xStart) + 
 							(yCord-yStart)*(yCord-yStart) >= range*range)? true : false ;
 		
@@ -102,6 +102,8 @@ public class Bullet extends Entity{
 	
 	public boolean isOutRange() {return this.outOfRange;}
 	
+	public double getXCord() {return this.xCord;}
+	public double getYCord() {return this.yCord;}
 	
 	
 }

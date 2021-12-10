@@ -1,6 +1,7 @@
 package ragmad.scenes.gamescene;
 
 import ragmad.GameEngine;
+import ragmad.entity.Collider;
 import ragmad.entity.characters.Player;
 import ragmad.entity.characters.npc.Foe;
 import ragmad.entity.item.Item;
@@ -36,18 +37,19 @@ public class GameScene implements Scene{
 	 * @param map - map that defines the world
 	 * @param player - player to play in the scene.
 	 */
-	public GameScene(int width, int height, Map map, Player player) {
+	public GameScene(int width, int height, Map map) {
 		this.m_height = height;
 		this.m_width = width;
-		this.player = player;
-		xOffset = GameEngine.GetWidth()/2 - this.player.getX(); 		//For testing change all offset variables to player.y
-		yOffset = GameEngine.GetHeight()/2 - this.player.getY();		//For testing change all offset variables to player.y
+		
 		this.map = map;
+		xOffset = 0; 		//For testing change all offset variables to player.y
+		yOffset = 0;		//For testing change all offset variables to player.y
 		
 		this.foes = new ArrayList();
 		this.itemCapsules = new ArrayList<>(); 
 	}
 	
+
 	
 	
 	///___________________________ GameEngine component methods area _________________________________
@@ -86,23 +88,36 @@ public class GameScene implements Scene{
 	 */
 	@Override
 	public void update() {
-		frameMovement = 5;
-		player.update(frameMovement, this.map);
+		if(player == null)
+			return;
+		
+		player.update();
+		if(player.getHealth() <= 0) {
+			GameEngine.EndGame();
+			this.player = null;
+			return;
+		}
 		this.updateOffset();
 		
+		int i = 0;
+		while(i < foes.size()) {
+			this.foes.get(i).update();
+			if(this.foes.get(i).getHealth() <= 0) {
+				this.foes.remove(i);
+			}else {
+				i++;
+			}
+		}
 		
-		for(int i = 0; i < foes.size() ;i++) { this.foes.get(i).update();}
 		
-		
+
 		if (Keyboard.esc()) { 
 			GameEngine.ChangeScene("Menu");
 		}
 		
 		 
-		int i = 0;
+		i = 0;
 		while(i < this.itemCapsules.size()) {
-			//this.itemCapsules.get(i).updateXY((int)this.xOffset,(int)this.yOffset, this.map.getTileWidth(), this.map.getTileHeight());
-			
 			double xItemCenter = this.itemCapsules.get(i).getXCord();
 			double yItemCenter = this.itemCapsules.get(i).getYCord();
 			double xDist = this.player.getXCord() - xItemCenter;
@@ -126,6 +141,10 @@ public class GameScene implements Scene{
 				i++;
 			}
 		}	
+		
+		
+		
+		
 	}
 
 	
@@ -139,6 +158,8 @@ public class GameScene implements Scene{
 	 */
 	@Override
 	public void render() {
+		if(player == null) return;
+		
 		for(int x = this.map.getWidth() - 1; x >= 0 ; x--) {
 			for(int y = 0 ; y < this.map.getHeight(); y++) {
 				int id = this.map.getMap()[x+y*map.getWidth()];
@@ -153,36 +174,63 @@ public class GameScene implements Scene{
 					if(Math.floor(itemCapsules.get(i).getXCord()) == x && Math.floor(itemCapsules.get(i).getYCord()) == y) {
 						this.itemCapsules.get(i).render();
 					}	
-				}
+				} 
 				for(int i = 0; i < foes.size() ;i++) {
 					if(Math.floor(foes.get(i).getXCord()) == x && Math.floor(foes.get(i).getYCord()) == y) {
-						this.foes.get(i).blocked = true;
-					}else {
-						this.foes.get(i).blocked = false;
+						this.foes.get(i).render();
 					}
 				}
 			}
 		}
 		
+		/*Rendering the players projectiles*/
+		player.renderProjectiles();
 		for(int i = 0; i < foes.size() ;i++) {
-			this.foes.get(i).render();
+			this.foes.get(i).renderProjectiles();
 		}
-		
 	}
 	
 	
 	
-//	/**
-//	 * Helper function that helps in encapsulating the rendering process ofo the item capsules.
-//	 * */
-//	private void renderCapsules() {
-//		for(int i = 0; i < this.itemCapsules.size(); i++) {
-//			/*Updating the render positioning regarding offset before rendering.*/
-//			this.itemCapsules.get(i).updateXY((int)this.xOffset,(int)this.yOffset, this.map.getTileWidth(), this.map.getTileHeight());
-//			/*Rendering phase*/
-//			this.itemCapsules.get(i).render();
-//		}
-//	}
+	/**
+	 * Check for spherical collision with any of the gamescene objects. Note that this function does not account for heights of the tiles. 
+	 * or the isometric height map. 
+	 * @param xC - the X coordinates of the checking area.
+	 * @param yC - the Y coordinates of the checking area
+	 * @param range - Range of the collision to check.
+	 * @return Collider object which contains if there is a collision and the entity it collides with. Note that if it collided with a solid tile, the Collider.collider will be null.
+	 */
+	public Collider sphereCollider(double xC, double yC, double range) {
+		Collider c = new Collider(null, false);
+		
+		/*Checking map tiles*/
+		int id = this.map.getMap()[(int)Math.round(xC) + (int)Math.round(yC)*this.map.getWidth()];
+		if(this.map.getTile(id).isSolid()) {
+			c.collided = true;
+		}
+		
+		/*Checking foes on the map*/
+		for(int i = 0; i < this.foes.size(); i++) {
+			double xDist = this.foes.get(i).getXCord() - xC;
+			double yDist = this.foes.get(i).getYCord() - yC;
+			if(xDist*xDist + yDist*yDist <= range*range) {
+				c.collider = this.foes.get(i);
+				c.collided = true;
+				return c;
+			}
+		}
+		
+		/*Checking if collision with player*/
+		double xDist = this.player.getXCord() - xC;
+		double yDist = this.player.getYCord() - yC;
+		if(xDist*xDist + yDist*yDist <= range*range) {
+			c.collider = this.player;
+			c.collided = true;
+			return c;
+		}
+
+		return c;
+	}
 	
 	
 	
@@ -218,7 +266,18 @@ public class GameScene implements Scene{
 	}
 	
 	
-	public void addNPC(Foe yugi) {this.foes.add(yugi);}
+	public void addNPC(Foe yugi) {
+		yugi.setScene(this);
+		this.foes.add(yugi);
+	}
+	
+	public void setPlayer(Player player) {
+		this.player = player;
+		this.player.setScene(this);
+		xOffset = GameEngine.GetWidth()/2 - this.player.getX(); 		//For testing change all offset variables to player.y
+		yOffset = GameEngine.GetHeight()/2 - this.player.getY();		//For testing change all offset variables to player.y
+	}
+	
 	
 	
 	
