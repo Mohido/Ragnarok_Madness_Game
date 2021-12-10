@@ -15,7 +15,7 @@ public abstract class Item extends Entity{
 	 * @param en - entity.
 	 * @return - If the item was successfully used.
 	 */
-	public boolean usage(Entity en) {return false;}
+	protected boolean usage(Entity en) {return false;}
 	 
 	public void update() {}
 	
@@ -25,4 +25,5 @@ public abstract class Item extends Entity{
 	public String toString() {
 		return itemName;
 	}
+	
 }
