@@ -58,19 +58,11 @@ jobs:
         with:
           credentials: ${{ secrets.CREDENTIALS }}
           filename: "archive.zip"
-          folderId: ${{ secrets.FOLDERID }}
+          folderId: "1WWuRuRJs5xWzqpL-4-UXZm4yYPCz3QWZ"
           name: "ragnorarok_build_v1.${{ github.run_number }}.commit-number:${{ github.sha }}.zip" # optional string
           overwrite: "false" # optional boolean
       
-      - run: echo -n -e "https://drive.google.com/drive/folders/1WWuRuRJs5xWzqpL-4-UXZm4yYPCz3QWZ?usp=sharing" > text.txt
-
-      - uses: pCYSl5EDgo/cat@master
-        id: hello
-        with:
-          path: text.txt
-
-      - run: echo $TEXT
-        env:
-          TEXT: ${{ steps.hello.outputs.text }}
+      - name: Output the link of the google drive
+        run: echo "https://drive.google.com/drive/folders/1WWuRuRJs5xWzqpL-4-UXZm4yYPCz3QWZ?usp=sharing"
 
       
