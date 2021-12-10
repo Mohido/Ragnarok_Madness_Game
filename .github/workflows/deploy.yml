@@ -61,4 +61,6 @@ jobs:
           folderId: ${{ secrets.FOLDERID }}
           name: "ragnorarok_build_v1.${{ github.run_number }}.commit-number:${{ github.sha }}.zip" # optional string
           overwrite: "false" # optional boolean
-
+      
+      - name: Output the google drive link
+        run: 'echo https://drive.google.com/drive/folders/1WWuRuRJs5xWzqpL-4-UXZm4yYPCz3QWZ?usp=sharing'
