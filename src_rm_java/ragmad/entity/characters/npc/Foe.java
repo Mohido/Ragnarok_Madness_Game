@@ -66,8 +66,6 @@ public class Foe extends Characters{
 	
 	/**
 	 * A methode which updates the players object (It is thread)
-	 * @param frameMovement the movement of the character by pixels
-	 * @param map the world map
 	 * */
 	public void update() {
 		setRasterPosFromCord(this.curSprite.getWidth()/2, this.curSprite.getHeight()/2);
@@ -123,8 +121,6 @@ public class Foe extends Characters{
 	
 	/**
 	 * Method that renders the player on the screen
-	 * 
-	 * @param SCALING the scaling rate of the player
 	 * */
 	public void render() {
 		
