@@ -44,7 +44,7 @@ public abstract class Characters extends Entity {
 	 * @param dirX - normalized x direction.
 	 * @param dirY - normalized y direction.
 	 */
-	protected void move(double dirX, double dirY){
+	public void move(double dirX, double dirY){
 		if(dirX < 0) direction = Direction.UP_RIGHT;
 		if(dirY < 0) direction = Direction.DOWN_RIGHT;
 		if(dirX > 0) direction = Direction.DOWN_LEFT;
