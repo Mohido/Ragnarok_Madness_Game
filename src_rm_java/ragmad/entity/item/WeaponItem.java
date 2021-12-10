@@ -13,6 +13,8 @@ public class WeaponItem extends Item{
 	private Sprite sprite;
 	private ArrayList<Bullet> firedBullets;
 	private double bulletSpeed;
+	private double range; // isometric range of shooting.
+	
 	
 	/**
 	 * Creates a weapon item. A weapon item is an item that can be equiped by the player as a main weapon. This kind of weapon is capable of shooting bullets.
@@ -21,10 +23,11 @@ public class WeaponItem extends Item{
 	 * @param shape - Item shape (Sprite/Image that defines the item bullets)
 	 * @param speed - Speed of the item bullets.
 	 */
-	public WeaponItem(String itemName, int strength, Sprite shape, double speed ) {
+	public WeaponItem(String itemName, int strength, Sprite shape, double speed , double range) {
 		this.itemName = itemName;
 		this.strength = strength;
 		this.sprite = shape;
+		this.range = range;
 		this.bulletSpeed = speed;
 		this.firedBullets = new ArrayList();
 	}
@@ -42,8 +45,8 @@ public class WeaponItem extends Item{
 	 * @param xStart - x raster starting point.
 	 * @param yStart - y raster starting point.
 	 */
-	public void shoot(double angle_r, int xStart, int yStart) {
-		this.firedBullets.add(new Bullet(xStart, yStart, angle_r, this.sprite, bulletSpeed));
+	public void shoot(double angle_r, double xCordStart, double yCordStart) {
+		this.firedBullets.add(new Bullet(xCordStart, yCordStart, angle_r, this.sprite, bulletSpeed, this.range));
 	}
 	 
 	
@@ -52,8 +55,19 @@ public class WeaponItem extends Item{
 	 */
 	public void update() {
 		for(int i = 0; i < firedBullets.size(); i++) {
-			this.firedBullets.get(i).update();
+			this.firedBullets.get(i).update();			
 		}
+		
+		int i = 0;
+		while(i < firedBullets.size()) {
+			if(firedBullets.get(i).isOutRange()) {
+				this.firedBullets.remove(i);
+			}else {
+				i++;
+			}	
+		}
+		
+		
 	}
 	
 	/**
@@ -65,16 +79,7 @@ public class WeaponItem extends Item{
 		}
 	}
 
-	/**
-	 * This function is necessary to be called whenever the player is moved. Since the bullets are in player space and not world space, we need to update the bullets as well.
-	 * @param xOffset - the amount the player has moved in the x direction
-	 * @param yOffset - the amount the player has moved in teh y direction
-	 */
-	public void offsetChange(double xOffset, double yOffset) {
-		for(int i = 0; i < firedBullets.size(); i++) {
-			this.firedBullets.get(i).x += xOffset;
-			this.firedBullets.get(i).y += yOffset;
-		}
-	}
+	
+	
 	
 }

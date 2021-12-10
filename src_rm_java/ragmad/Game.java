@@ -80,20 +80,20 @@ public class Game {
 		Map map = initMap();
 		
 		// Initializing the player. 
-		Player player = initPlayer(3,0); 
+		Player player = initPlayer(3,1); 
 		player.setMap(map);
 		
 		
 		// Initializing the Foe1.
-		Foe foe1 = initFoe1(1,1);
+		Foe foe1 = initFoe1(2,2);
 		foe1.setTarget(player);
-		foe1.setVisualRange(1, false);
+		foe1.setVisualRange(3, true);
 		foe1.setMap(map);
 		
 		// Initializing the Foe2.
-		Foe foe2 = initFoe1(3,3);
+		Foe foe2 = initFoe1(5,6);
 		foe2.setTarget(player);
-		foe2.setVisualRange(1, false);
+		foe2.setVisualRange(3, true);
 		foe2.setMap(map);
 		
 		
@@ -103,7 +103,7 @@ public class Game {
 		gameScene.addNPC(foe2);
 		gameScene.zoomIn();
 		
-		gameScene.addItemCapsule(1, 0, new WeaponItem("Corruption Pistol", 10, BULLET_1, 5), CAPSULE_1);
+		gameScene.addItemCapsule(1, 0, new WeaponItem("Corruption Pistol", 10, BULLET_1, 5, 5), CAPSULE_1);
 		
 		// Creates a Main Menu
 		MainMenu mainMenu = initMainMenu();
@@ -294,7 +294,7 @@ public class Game {
 		dirSprMap.put( Direction.DOWN_RIGHT, 5);
 		
 		Foe f =  new Foe(xPos, yPos, playerSprites, spriteHeight, spriteWidth, dirSprMap);
-		f.setMainWeapon(new WeaponItem("FoeGun", 5, BULLET_1 , 1));
+		f.setMainWeapon(new WeaponItem("FoeGun", 5, BULLET_1 , 0.05, 5));
 		return f;
 	}
 	

@@ -101,7 +101,7 @@ public class GameScene implements Scene{
 		 
 		int i = 0;
 		while(i < this.itemCapsules.size()) {
-			this.itemCapsules.get(i).updateXY((int)this.xOffset,(int)this.yOffset, this.map.getTileWidth(), this.map.getTileHeight());
+			//this.itemCapsules.get(i).updateXY((int)this.xOffset,(int)this.yOffset, this.map.getTileWidth(), this.map.getTileHeight());
 			
 			double xItemCenter = this.itemCapsules.get(i).getXCord();
 			double yItemCenter = this.itemCapsules.get(i).getYCord();
@@ -116,19 +116,16 @@ public class GameScene implements Scene{
 			if(Keyboard.equip() && inItemRadius) {
 				/*remove Item from the array list and equip it to the player*/
 				ItemCapsule itc = this.itemCapsules.remove(i);
-				Item it = itc.getItem();
+				Item it = itc.getItem(); 
 				this.player.addItem(it);
-			}else if(inItemRadius) { // tell user that he can equip an item.
+			}else if(inItemRadius) { // tell user that he can equip an item. 
 				System.out.println("ItemCapsule in range, press 'E' to equip.");
 				i++;
 			}
 			else {			
 				i++;
 			}
-			
-		}
-		
-		
+		}	
 	}
 
 	
@@ -158,27 +155,34 @@ public class GameScene implements Scene{
 					}	
 				}
 				for(int i = 0; i < foes.size() ;i++) {
-					if(Math.floor(foes.get(i).getX()) == x && Math.floor(foes.get(i).getYCord()) == y) {
-						this.foes.get(i).render();
+					if(Math.floor(foes.get(i).getXCord()) == x && Math.floor(foes.get(i).getYCord()) == y) {
+						this.foes.get(i).blocked = true;
+					}else {
+						this.foes.get(i).blocked = false;
 					}
 				}
 			}
 		}
 		
+		for(int i = 0; i < foes.size() ;i++) {
+			this.foes.get(i).render();
+		}
 		
 	}
 	
-	/**
-	 * Helper function that helps in encapsulating the rendering process ofo the item capsules.
-	 * */
-	private void renderCapsules() {
-		for(int i = 0; i < this.itemCapsules.size(); i++) {
-			/*Updating the render positioning regarding offset before rendering.*/
-			this.itemCapsules.get(i).updateXY((int)this.xOffset,(int)this.yOffset, this.map.getTileWidth(), this.map.getTileHeight());
-			/*Rendering phase*/
-			this.itemCapsules.get(i).render();
-		}
-	}
+	
+	
+//	/**
+//	 * Helper function that helps in encapsulating the rendering process ofo the item capsules.
+//	 * */
+//	private void renderCapsules() {
+//		for(int i = 0; i < this.itemCapsules.size(); i++) {
+//			/*Updating the render positioning regarding offset before rendering.*/
+//			this.itemCapsules.get(i).updateXY((int)this.xOffset,(int)this.yOffset, this.map.getTileWidth(), this.map.getTileHeight());
+//			/*Rendering phase*/
+//			this.itemCapsules.get(i).render();
+//		}
+//	}
 	
 	
 	

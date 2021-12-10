@@ -59,7 +59,7 @@ public class Player extends Characters {
 		this.curSprite = animationSprites[0];
 		this.inventory = new ArrayList();
 		this.health = 100;
-		
+		this.blocked = false;
 		
 		setRasterPosFromCord(this.curSprite.getWidth()/2, this.curSprite.getHeight()/2);
 		
@@ -112,7 +112,7 @@ public class Player extends Characters {
 			int a_c = this.currentAnimationCol;
 			this.curSprite = this.animationSprites[a_c + a_r * this.animationCols];
 		}else {
-			this.isMoving = false;
+			this.isMoving = false; 
 		}
 		
 		/*Shoot if mouse is pressed*/ 
@@ -123,7 +123,7 @@ public class Player extends Characters {
 		
 		/*update projectiles*/
 		if( this.inventory.size() > 0 && inventory.get(0) instanceof WeaponItem) { 
-			((WeaponItem)this.inventory.get(0)).offsetChange(modifiedDirX, modifiedDirY); // if player moves, offset the projectiles
+			//((WeaponItem)this.inventory.get(0)).offsetChange(modifiedDirX, modifiedDirY); // if player moves, offset the projectiles
 			((WeaponItem)this.inventory.get(0)).update();  // update projectiles movement.
 		}
 	} 
@@ -145,8 +145,8 @@ public class Player extends Characters {
 		int xPixel = -(GameEngine.GetWidth() >> 1);
 		int yPixel = -(GameEngine.GetHeight() >> 1);
 		//System.out.println("rendering player at: " + xPixel + " " + yPixel);
-		
-		for(int y = 0 ; y < s_height; y++) {
+		 
+		for(int y = 0 ; y < s_height; y++) { 
 			int yy = y - yPixel;   //Mapping coordinates space to the GameEngine pixel Space (Raster space) //yOffset for vertical movement
 			if( yy >= GameEngine.GetHeight()) break;
 			if(yy < -s_height) break;
@@ -178,5 +178,4 @@ public class Player extends Characters {
 	 * @param it - The item wanted to be added to the inventory (Picked up Item)
 	 */
 	public void addItem(Item it) {this.inventory.add(it);}
-
 }

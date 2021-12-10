@@ -11,6 +11,7 @@ import ragmad.scenes.gamescene.Map;
 import ragmad.scenes.gamescene.Tile;
 
 public abstract class Characters extends Entity {
+	public boolean blocked;
 	protected Direction direction;
 	protected boolean isMoving = false;	
 	protected double xCord, yCord;

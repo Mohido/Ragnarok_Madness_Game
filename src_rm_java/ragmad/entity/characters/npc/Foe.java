@@ -8,6 +8,7 @@ import ragmad.entity.characters.Direction;
 import ragmad.entity.item.Item;
 import ragmad.entity.item.WeaponItem;
 import ragmad.graphics.sprite.Sprite;
+import ragmad.io.Mouse;
 import ragmad.scenes.gamescene.GameScene;
 
 
@@ -44,7 +45,7 @@ public class Foe extends Characters{
 		this.animationCols = animationsPerType;
 		this.spriteMap = spriteMap;
 		this.curSprite = animationSprites[0];
-		
+		this.blocked = false;
 		this.observationRange = 0;
 		/*Foe Isometric coordinates*/
 		this.xCord = x_cord;
@@ -100,6 +101,22 @@ public class Foe extends Characters{
 			this.curSprite = this.animationSprites[a_c + a_r * this.animationCols];
 		}
 		
+		
+		/*Shooting projectiles if they observe a player*/
+		if(this.target != null) {
+			double distanceSqr = (this.target.getXCord() - this.xCord)*(this.target.getXCord() - this.xCord) + 
+								 (this.target.getYCord() - this.yCord)*(this.target.getYCord() - this.yCord);
+			if(distanceSqr <= this.observationRange*this.observationRange) {
+				int chance = (int)Math.round(Math.random() * 30);
+				if(chance == 0) {
+					double angle_r = Math.atan2(this.target.getYCord() - this.getYCord(), this.target.getXCord() - this.xCord );
+					this.mainWeapon.shoot(angle_r, this.xCord, this.yCord);
+				}
+			}
+		}
+		
+		this.mainWeapon.update();
+		
 	}
 	
 	
@@ -112,33 +129,38 @@ public class Foe extends Characters{
 	 * @param SCALING the scaling rate of the player
 	 * */
 	public void render() {
-		int SCALING = 1;
-		int[] outputPixels = GameEngine.GetPixels();
-		int[] tilePixels = curSprite.getPixels();
 		
-		int s_height = (curSprite.getHeight()*SCALING);
-		int s_width =  (curSprite.getWidth()*SCALING);
+		int SCALING = 1;
+		
+		if(!blocked) {
+			int[] outputPixels = GameEngine.GetPixels();
+			int[] tilePixels = curSprite.getPixels();
+			
+			int s_height = (curSprite.getHeight()*SCALING);
+			int s_width =  (curSprite.getWidth()*SCALING);
 
-		int xPixel = (int)(x - GameScene.xOffset);
-		int yPixel = (int)(y - GameScene.yOffset);
+			int xPixel = (int)(x - GameScene.xOffset);
+			int yPixel = (int)(y - GameScene.yOffset);
 
-		for(int y = 0 ; y < s_height; y++) {
-			int yy = y - yPixel;   //Mapping coordinates space to the GameEngine pixel Space (Raster space) //yOffset for vertical movement
-			if( yy >= GameEngine.GetHeight()) break;
-			if(yy < -s_height) break;
-			if(yy < 0) continue;  
-			for(int x = 0 ; x < s_width; x++) {
-				int xx = x - xPixel;
-				int col = tilePixels[x/SCALING + (y/SCALING) * curSprite.getWidth()]; // getting the pixel colour of the tile
-				
-				if ( xx >= GameEngine.GetWidth() ) // break if the renderer pointer has exited screen right side
-					break;
-				if( xx < 0 || (col & 0xff000000) == 0 )  //don't do anything if the xx is out of bounds or pixel is transparent 
-					continue;
-				
-				if(col != 0xffd6e7ea) outputPixels[xx + yy * GameEngine.GetWidth()] = col + 0xfff00f0f;
+			for(int y = 0 ; y < s_height; y++) {
+				int yy = y - yPixel;   //Mapping coordinates space to the GameEngine pixel Space (Raster space) //yOffset for vertical movement
+				if( yy >= GameEngine.GetHeight()) break;
+				if(yy < -s_height) break;
+				if(yy < 0) continue;  
+				for(int x = 0 ; x < s_width; x++) {
+					int xx = x - xPixel;
+					int col = tilePixels[x/SCALING + (y/SCALING) * curSprite.getWidth()]; // getting the pixel colour of the tile
+					
+					if ( xx >= GameEngine.GetWidth() ) // break if the renderer pointer has exited screen right side
+						break;
+					if( xx < 0 || (col & 0xff000000) == 0 )  //don't do anything if the xx is out of bounds or pixel is transparent 
+						continue;
+					
+					if(col != 0xffd6e7ea) outputPixels[xx + yy * GameEngine.GetWidth()] = col + 0xfff00f0f;
+				}
 			}
 		}
+		this.mainWeapon.render();
 	}
 	
 	
