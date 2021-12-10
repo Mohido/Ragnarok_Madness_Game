@@ -6,23 +6,26 @@ import ragmad.GameEngine;
 import ragmad.entity.characters.Characters;
 import ragmad.entity.characters.Direction;
 import ragmad.entity.item.Item;
+import ragmad.entity.item.WeaponItem;
 import ragmad.graphics.sprite.Sprite;
 import ragmad.scenes.gamescene.GameScene;
 
 
 public class Foe extends Characters{
+	WeaponItem mainWeapon;
 	Sprite[] animationSprites;			// Animations: Row are directions, columns are animations sequence for that direction
 	int animationRows, animationCols;
 	HashMap<Direction, Integer> spriteMap; // Direction to animationRow mapping.
 	Sprite curSprite;
-	private ArrayList<Item> inventory;		// Foe can have Items and its own inventory.
+	ArrayList<Item> inventory;		// Foe can have Items and its own inventory.
 	int anim, currentAnimationCol; 			// Helps in rendering the current sprite.
 	double xDir, yDir; // = (2 * random - 1); // = (2 * (1 - random) - 1);
-	
+	Characters target;
+	double observationRange;
 	
 	/**
 	 * Creates a Foe type of NPC. Foes can have inventory and attack the player whenever he is in range.
-	 * Foes type of NPCs are attackable by the player. After creating a Foe, make sure to attach it to a map.
+	 * Foes type of NPCs are attackable by the player. After creating a Foe, make sure to attach it to a map. 
 	 * 
 	 * @param x_cord - The x Isometric coordinate of the Foe (Relates to the attached map)
 	 * @param y_cord - The y Isometric Coordinate of the Foe (Relates to the attached map)
@@ -42,15 +45,19 @@ public class Foe extends Characters{
 		this.spriteMap = spriteMap;
 		this.curSprite = animationSprites[0];
 		
+		this.observationRange = 0;
 		/*Foe Isometric coordinates*/
 		this.xCord = x_cord;
 		this.yCord = y_cord;
 
+		this.health = 100;
+		
 		setRasterPosFromCord(this.curSprite.getWidth()/2, this.curSprite.getHeight()/2);
 		this.xDir = Math.random()*2 - 1;
 		this.yDir = Math.random()*2 - 1;
-		
 	}
+	
+
 	
 	
 	
@@ -143,4 +150,23 @@ public class Foe extends Characters{
 		System.out.println("Added Item: " + it.toString());
 		this.inventory.add(it);
 	}
+	
+	public void setTarget(Characters target) {this.target = target;}
+	public void setMainWeapon(WeaponItem mainWeapon) {this.mainWeapon = mainWeapon;}
+
+
+
+
+
+
+	/**
+	 * Sets the observation range of the foe. 
+	 * @param range - The radius in isometric space. It corresponds to the number of tiles the Foe can see.
+	 * @param prespective - If it should be elipsoid or not.
+	 */
+	public void setVisualRange(double range, boolean prespective) {
+		observationRange = range;
+	}
+	
+	
 }

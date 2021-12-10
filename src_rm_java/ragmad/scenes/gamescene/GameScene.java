@@ -7,9 +7,7 @@ import ragmad.entity.item.Item;
 import ragmad.entity.item.ItemCapsule;
 import ragmad.graphics.sprite.Sprite;
 import ragmad.io.Keyboard;
-import ragmad.io.Mouse;
 import ragmad.scenes.Scene;
-import java.lang.Math;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,7 +24,7 @@ public class GameScene implements Scene{
 	private Map map;
 	private Player player; 	
 	private ArrayList<ItemCapsule> itemCapsules; // Stores the items on the scene.
-	private final static int interactionRadiusSqr = 50*50;
+	private final static int interactionRadiusSqr = 2;
 	private ArrayList<Foe> foes;
 	
 	
@@ -100,16 +98,18 @@ public class GameScene implements Scene{
 			GameEngine.ChangeScene("Menu");
 		}
 		
-		
+		 
 		int i = 0;
 		while(i < this.itemCapsules.size()) {
-			double xItemCenter = this.itemCapsules.get(i).x + (this.map.getTileWidth()>>1);
-			double yItemCenter = this.itemCapsules.get(i).y;
-			double xDist = (- this.player.x + 20) - xItemCenter;
-			xDist = xDist*xDist;
-			double yDist = (- this.player.y + 20) - yItemCenter;
-			yDist = yDist*yDist;
+			this.itemCapsules.get(i).updateXY((int)this.xOffset,(int)this.yOffset, this.map.getTileWidth(), this.map.getTileHeight());
 			
+			double xItemCenter = this.itemCapsules.get(i).getXCord();
+			double yItemCenter = this.itemCapsules.get(i).getYCord();
+			double xDist = this.player.getXCord() - xItemCenter;
+			double yDist = this.player.getYCord() - yItemCenter;
+			
+			xDist = xDist*xDist;
+			yDist = yDist*yDist;
 			double distanceSqr = xDist + yDist; 
 			boolean inItemRadius =  distanceSqr <= interactionRadiusSqr;
 			
@@ -127,6 +127,8 @@ public class GameScene implements Scene{
 			}
 			
 		}
+		
+		
 	}
 
 	
@@ -147,12 +149,23 @@ public class GameScene implements Scene{
 				if(anchorExists(x, y, t, id)) {
 					t.renderToRaster(x, y, (int)xOffset,(int) yOffset, SCALING);
 				}
+				if(Math.floor(player.getXCord()) == x && Math.floor(player.getYCord()) == y) {
+					player.render(1);
+				}
+				for(int i = 0; i < this.itemCapsules.size(); i++) {
+					if(Math.floor(itemCapsules.get(i).getXCord()) == x && Math.floor(itemCapsules.get(i).getYCord()) == y) {
+						this.itemCapsules.get(i).render();
+					}	
+				}
+				for(int i = 0; i < foes.size() ;i++) {
+					if(Math.floor(foes.get(i).getX()) == x && Math.floor(foes.get(i).getYCord()) == y) {
+						this.foes.get(i).render();
+					}
+				}
 			}
 		}
 		
-		renderCapsules(); 
-		player.render(1);
-		for(int i = 0; i < foes.size() ;i++) { this.foes.get(i).render();}
+		
 	}
 	
 	/**
@@ -191,13 +204,13 @@ public class GameScene implements Scene{
 	 */
 	public static void zoomOut() { SCALING = (SCALING > 1 )? SCALING - 1 : 1 ;}
 
-
-	private int temp = 0;
+	
+	/**
+	 * Synchronize the camera with the player object.
+	 */
 	public void updateOffset() {
-		temp += 1;
 		xOffset = this.player.getX() + (GameEngine.GetWidth() >> 1); 		//+ GameEngine.GetWidth()/2 For testing change all offset variables to player.y
 		yOffset = this.player.getY()  + (GameEngine.GetHeight() >> 1);		//+ GameEngine.GetHeight()/2  For testing change all offset variables to player.y
-		
 	}
 	
 	

@@ -16,9 +16,8 @@ public abstract class Characters extends Entity {
 	protected double xCord, yCord;
 	protected double speed;
 	protected Map map;
+	protected int health;
 	
-	public void update() {}
-	public Direction getDirection() {return direction;}
 	
 	
 	/**
@@ -78,5 +77,7 @@ public abstract class Characters extends Entity {
 	public double getY() {return this.y; }
 	public double getXCord() {return this.xCord;}
 	public double getYCord() {return this.yCord;}
+	public Direction getDirection() {return direction;}
 	public void setMap(Map map) { this.map = map;}
+	public void setHealth(int health) { this.health = health;}
 }

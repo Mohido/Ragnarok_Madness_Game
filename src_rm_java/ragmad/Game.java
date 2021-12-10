@@ -14,7 +14,6 @@ import ragmad.scenes.gamescene.Map;
 import ragmad.scenes.gamescene.Tile;
 import ragmad.scenes.mainmenu.MainMenu;
 import ragmad.scenes.settingsscene.Settings;
-import ragmad.sound_engine.MusicClips;
 
 /**
  * Initializes the Game resources, sprites, and the rest of the Game Engine. It is the GameCore in other words.
@@ -23,8 +22,6 @@ import ragmad.sound_engine.MusicClips;
  *
  */
 public class Game {
- 
-	
 	/*Sound Paths*/
     final String MUSIC_GOT_URL = Paths.get("").toAbsolutePath().getParent()  + "/res/sounds/got.wav";
     final String SOUND_SLASH_URL = Paths.get("").toAbsolutePath().getParent()  +  "/res/sounds/button_sound.wav";
@@ -35,7 +32,7 @@ public class Game {
     final String SETTINGS_IMAGE_URL = Paths.get("").toAbsolutePath().getParent()  +  "/res/settings_menu.jpeg";
     
 	/*Loading Spritesheets.*/
-	final SpriteSheet DESERT_SHEET = new SpriteSheet(Paths.get("").toAbsolutePath().getParent()  +  "/res/ground_tiles_d.png");
+	final SpriteSheet DESERT_SHEET = new SpriteSheet(Paths.get("").toAbsolutePath().getParent()  +  "/res/desert_res_orig.png");
 	final SpriteSheet PORTAL_SHEET = new SpriteSheet(Paths.get("").toAbsolutePath().getParent()  + "/res/porotals.png");
 	final SpriteSheet PLAYER_SHEET = new SpriteSheet( Paths.get("").toAbsolutePath().getParent() + "/res/jaden_yuki_2.png");
 	final SpriteSheet GRASS_SHEET = new SpriteSheet( Paths.get("").toAbsolutePath().getParent() + "/res/grass.png");
@@ -49,7 +46,6 @@ public class Game {
 
 
 	/*Loading Sprites*/
-	
 	final Sprite CAPSULE_1 = new Sprite(CAPSULE_SHEET, 0, 0, 32, 32);
 	final Sprite BULLET_1 = new Sprite(BULLET_SHEET, 0, 0, 16, 16);
 	
@@ -78,7 +74,6 @@ public class Game {
 	 * @param height height of the game window
 	 */
 	public Game(int width, int height) {
-		
 		// Create A Game Engine.
 		GameEngine engine = new GameEngine(width, height);
 		
@@ -87,13 +82,20 @@ public class Game {
 		// Initializing the player. 
 		Player player = initPlayer(3,0); 
 		player.setMap(map);
-		// Initializing the Foes.
+		
+		
+		// Initializing the Foe1.
 		Foe foe1 = initFoe1(1,1);
+		foe1.setTarget(player);
+		foe1.setVisualRange(1, false);
 		foe1.setMap(map);
 		
-		// Initializing the Foes.
+		// Initializing the Foe2.
 		Foe foe2 = initFoe1(3,3);
+		foe2.setTarget(player);
+		foe2.setVisualRange(1, false);
 		foe2.setMap(map);
+		
 		
 		//Creates a GameScene
 		GameScene gameScene = initGameScene(player,map);
@@ -101,12 +103,10 @@ public class Game {
 		gameScene.addNPC(foe2);
 		gameScene.zoomIn();
 		
-		
 		gameScene.addItemCapsule(1, 0, new WeaponItem("Corruption Pistol", 10, BULLET_1, 5), CAPSULE_1);
 		
 		// Creates a Main Menu
 		MainMenu mainMenu = initMainMenu();
-		
 		
 		//Create a Settings Menu
 		Settings settings = new Settings(GameEngine.GetWidth(), GameEngine.GetHeight(), SETTINGS_IMAGE_URL );
@@ -121,11 +121,13 @@ public class Game {
 		
 	}
 
+	
+	
+	
 	/**
 	 * Initialises the Main Menu scene
 	 * @return main menu
 	 */
-
 	private MainMenu initMainMenu() {
 		//Init Main Menu Scene
 		String[] opts = new String[3];
@@ -138,6 +140,10 @@ public class Game {
 	
 	
 	
+	/**
+	 * Initializes the map.
+	 * @return Map object.
+	 */
 	private Map initMap() {
 		// Initialize GameScene.
 		HashMap<Integer, Tile> colorMap = new HashMap<Integer, Tile>();
@@ -165,16 +171,28 @@ public class Game {
 	
 	
 	
+	
+	
+	/**
+	 * Initializes a GameScene object. It needs atleast a player and a map to be initialized.
+	 * @param player - Player object.
+	 * @param map - Map object.
+	 * @return GameScene object which it can be attached to the GameEngine object.
+	 */
 	private GameScene initGameScene(Player player, Map map) {
-		return new GameScene(GameEngine.GetWidth(), GameEngine.GetHeight(), map, player);
-		
+		return new GameScene(GameEngine.GetWidth(), GameEngine.GetHeight(), map, player);	
 	}
 	
 	
 	
 	
 	
-	
+	/**
+	 * Creates a player object on the given coordinates
+	 * @param xPos - Isometric x coordinate of where the Player should be spawned
+	 * @param yPos - Isometric y coordinate of where the Player should be spawned
+	 * @return Player type object. It can be attached to a GameScene object.
+	 */
 	private Player initPlayer(int xPos, int yPos) {
 		/*Initialization the Sprites of the player*/
 		int spriteWidth = 7; //Sprites per Direction
@@ -228,7 +246,12 @@ public class Game {
 	
 	
 
-	
+	/**
+	 * Similar to create player, it creates a foe on the given coordinates
+	 * @param xPos - Isometric x coordinate of where the Foe should be spawned
+	 * @param yPos - Isometric y coordinate of where the Foe should be spawned
+	 * @return Foe type object. It can be attached to a GameScene object.
+	 */
 	private Foe initFoe1(int xPos, int yPos) {
 		/*Initialization the Sprites of the player*/
 		int spriteWidth = 7; //Sprites per Direction
@@ -270,7 +293,9 @@ public class Game {
 		dirSprMap.put( Direction.UP_RIGHT, 4);
 		dirSprMap.put( Direction.DOWN_RIGHT, 5);
 		
-		return new Foe(xPos, yPos, playerSprites, spriteHeight, spriteWidth, dirSprMap);
+		Foe f =  new Foe(xPos, yPos, playerSprites, spriteHeight, spriteWidth, dirSprMap);
+		f.setMainWeapon(new WeaponItem("FoeGun", 5, BULLET_1 , 1));
+		return f;
 	}
 	
 	

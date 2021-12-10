@@ -1,18 +1,15 @@
 package ragmad.entity.characters;
 
 import ragmad.scenes.gamescene.Map;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import ragmad.GameEngine;
 import ragmad.entity.item.Item;
 import ragmad.entity.item.WeaponItem;
 import ragmad.graphics.sprite.Sprite;
 import ragmad.io.Keyboard;
 import ragmad.io.Mouse;
-import ragmad.scenes.gamescene.GameScene;
-import ragmad.scenes.gamescene.Tile;
+
 
 /**
  * Player in the game
@@ -61,6 +58,8 @@ public class Player extends Characters {
 		this.animationRows = animationTypes;
 		this.curSprite = animationSprites[0];
 		this.inventory = new ArrayList();
+		this.health = 100;
+		
 		
 		setRasterPosFromCord(this.curSprite.getWidth()/2, this.curSprite.getHeight()/2);
 		
@@ -74,9 +73,7 @@ public class Player extends Characters {
 	 * @param map the world map
 	 * */
 	public void update(int frameMovement, Map map) {
-		//System.out.println("Player1: " + xCord + " " + yCord);
 		setRasterPosFromCord(this.curSprite.getWidth()/2, this.curSprite.getHeight()/2);
-		
 		
 		anim = (anim+1) & 7; 	// same as anim % 32. But much faster. This here is just an update counter that resets when it reaches 32.
 		if(anim == 0) {
@@ -120,8 +117,8 @@ public class Player extends Characters {
 		
 		/*Shoot if mouse is pressed*/ 
 		if(Mouse.buttonNum == 1 && this.inventory.size() > 0 && inventory.get(0) instanceof WeaponItem) {
-			double angle_r = Math.atan2(Mouse.y - (GameEngine.GetHeight()>>1), Mouse.x - (GameEngine.GetWidth() >> 1) );
-			((WeaponItem)inventory.get(0)).shoot(angle_r, -(int)this.x, -(int)this.y);
+			double angle_r = Math.atan2(Mouse.y - ((int)GameEngine.GetHeight()>>1), Mouse.x - (GameEngine.GetWidth()>>1) );
+			((WeaponItem)inventory.get(0)).shoot(angle_r, (int)GameEngine.GetWidth()>>1, (int)GameEngine.GetHeight()>>1);
 		} 
 		
 		/*update projectiles*/
@@ -174,13 +171,12 @@ public class Player extends Characters {
 		
 	}
 
+	
+	
 	/**
 	 * Add an item to the inventory.
 	 * @param it - The item wanted to be added to the inventory (Picked up Item)
 	 */
-	public void addItem(Item it) {
-		//System.out.println("Added Item: " + it.toString());
-		this.inventory.add(it);
-	}
-	
+	public void addItem(Item it) {this.inventory.add(it);}
+
 }
