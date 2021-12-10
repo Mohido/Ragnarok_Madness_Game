@@ -44,8 +44,8 @@ public class Player extends Characters {
 	
 	/**
 	 * Constructs and initializes a Player. It can create a player and defines its animation sprites, and directions/animation mapping.
-	 * @param x - This is the X position of the player.	Positive X means move the player Right from the top-left of the screen.
-	 * @param y - This is the Y position of the player. Positive Y means move the player Downwards from the top-left of the screen
+	 * @param xCord - This is the X position of the player.	Positive X means move the player Right from the top-left of the screen.
+	 * @param yCord - This is the Y position of the player. Positive Y means move the player Downwards from the top-left of the screen
 	 * @param animationSprites - This is an array that contains all the Sprites that the player going to use. Define the Sprites in a contigoues order. E.g: Up sprites, then Down direction sprites and so on. Note: Sprites number per direction must be same. 
 	 * @param animationTypes - This is the row counts of the animation sprites. In other words, how many animations types do we have. E.g: Up,Right,Left,Down are 4 animation types.
 	 * @param animationsPerType - This is the count of animations we do have per each direction. E.G: 'animationsPerType = 4' means that we have 4 different animations for walking on a specific direction. Note that all directions will have the same count of animations.
