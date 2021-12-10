@@ -43,8 +43,8 @@ public class WeaponItem extends Item{
 	/**
 	 * Shoots a bullet toward the given angle.
 	 * @param angle_r - Angle of the shooting.
-	 * @param xStart - x raster starting point.
-	 * @param yStart - y raster starting point.
+	 * @param xCordStart - x isometric starting point.
+	 * @param yCordStart - y isometric starting point.
 	 */
 	public void shoot(double angle_r, double xCordStart, double yCordStart) {
 		this.firedBullets.add(new Bullet(xCordStart, yCordStart, angle_r, this.sprite, bulletSpeed, this.range));

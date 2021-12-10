@@ -35,7 +35,6 @@ public class GameScene implements Scene{
 	 * @param width - visibility width
 	 * @param height - visibility height
 	 * @param map - map that defines the world
-	 * @param player - player to play in the scene.
 	 */
 	public GameScene(int width, int height, Map map) {
 		this.m_height = height;
