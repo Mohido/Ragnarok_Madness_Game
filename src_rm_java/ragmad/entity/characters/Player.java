@@ -18,17 +18,14 @@ import ragmad.scenes.gamescene.Tile;
  * Player in the game
  */
 public class Player extends Characters {
-	 
-	
 	private Sprite curSprite;
 	private int anim = 0;
-	private boolean isWalking = false;
 
 	int animationRows, animationCols;
 	private Sprite[] animationSprites;
 	private HashMap<Direction, Integer> spriteMap;
 	private int currentAnimationCol;
-	
+
 	private ArrayList<Item> inventory; /// Inventory is a bag. It stores different kind of items. However, for the simplicity, we are taking first picked item as a weaponItem .
 	
 	/**
@@ -56,8 +53,7 @@ public class Player extends Characters {
 	public Player(int xCord, int yCord, Sprite[] animationSprites, int animationTypes, int animationsPerType,  HashMap<ragmad.entity.characters.Direction, Integer> spriteMap) {
 		this.xCord = xCord; 
 		this.yCord = yCord;
-		setRasterPosFromCord();
-		 
+		this.speed = 0.05;
 		this.currentAnimationCol = 0;
 		this.spriteMap = spriteMap;
 		this.animationSprites = animationSprites;
@@ -65,44 +61,63 @@ public class Player extends Characters {
 		this.animationRows = animationTypes;
 		this.curSprite = animationSprites[0];
 		this.inventory = new ArrayList();
+		
+		setRasterPosFromCord(this.curSprite.getWidth()/2, this.curSprite.getHeight()/2);
+		
 	}
 	
 	
+
 	/**
 	 * A methode which updates the players object (It is thread)
 	 * @param frameMovement the movement of the character by pixels
 	 * @param map the world map
 	 * */
 	public void update(int frameMovement, Map map) {
+		//System.out.println("Player1: " + xCord + " " + yCord);
+		setRasterPosFromCord(this.curSprite.getWidth()/2, this.curSprite.getHeight()/2);
+		
+		
 		anim = (anim+1) & 7; 	// same as anim % 32. But much faster. This here is just an update counter that resets when it reaches 32.
 		if(anim == 0) {
 			this.currentAnimationCol = (currentAnimationCol + 1) % this.animationCols ;
 		}
-		//System.out.println("Player1: " + xCord + " " + yCord);
-		setRasterPosFromCord();
+
 		int xOffset = 0 ,  yOffset = 0;
-//		if(Keyboard.isUp()) yOffset+=frameMovement;
-//		if(Keyboard.isDown()) yOffset-=frameMovement;
-//		if(Keyboard.isRight()) xOffset-=frameMovement;
-//		if(Keyboard.isLeft()) xOffset+=frameMovement;
+		if(Keyboard.isUp()) {
+			yOffset -= 1;
+			xOffset += 1;
+		}
+		if(Keyboard.isDown()) {
+			yOffset += 1;
+			xOffset -= 1;
+		}
+		if(Keyboard.isRight()) { 
+			xOffset += 1;
+			yOffset += 1;
+		}
+		if(Keyboard.isLeft()) {
+			xOffset -= 1;
+			yOffset -= 1;
+		}
+		
+		
 		double modifiedDirX = 0;
 		double modifiedDirY = 0;
-		 
-		//this.yCord += 0.1;
-		
 		if(xOffset != 0 || yOffset != 0) {
-			double temp = Math.sqrt(xOffset*xOffset + yOffset*yOffset);
-			modifiedDirX = (3 * xOffset/temp);
-			modifiedDirY = (3* yOffset/temp);
+			double temp = Math.sqrt(xOffset*xOffset + yOffset*yOffset); 
+			modifiedDirX = (xOffset/temp);
+			modifiedDirY = (yOffset/temp);
+			 
+			this.move(modifiedDirX, modifiedDirY);
 			
-			move(modifiedDirX, modifiedDirY, map, map.getColorMap(), curSprite);
-			isWalking = true;
 			int a_r = this.spriteMap.get(direction); // Get the row of the animation sprite we will be animating. 
 			int a_c = this.currentAnimationCol;
 			this.curSprite = this.animationSprites[a_c + a_r * this.animationCols];
 		}else {
-			isWalking = false;
+			this.isMoving = false;
 		}
+		
 		/*Shoot if mouse is pressed*/ 
 		if(Mouse.buttonNum == 1 && this.inventory.size() > 0 && inventory.get(0) instanceof WeaponItem) {
 			double angle_r = Math.atan2(Mouse.y - (GameEngine.GetHeight()>>1), Mouse.x - (GameEngine.GetWidth() >> 1) );
@@ -110,15 +125,11 @@ public class Player extends Characters {
 		} 
 		
 		/*update projectiles*/
-		if( this.inventory.size() > 0 && inventory.get(0) instanceof WeaponItem) {
+		if( this.inventory.size() > 0 && inventory.get(0) instanceof WeaponItem) { 
 			((WeaponItem)this.inventory.get(0)).offsetChange(modifiedDirX, modifiedDirY); // if player moves, offset the projectiles
 			((WeaponItem)this.inventory.get(0)).update();  // update projectiles movement.
 		}
-	}
-	
-	
-	
-	
+	} 
 	
 	
 	
@@ -128,16 +139,14 @@ public class Player extends Characters {
 	 * @param SCALING the scaling rate of the player
 	 * */
 	public void render(int SCALING) {
-		setRasterPosFromCord();
-		setRasterPosFromCord();
 		int[] outputPixels = GameEngine.GetPixels();
 		int[] tilePixels = curSprite.getPixels();
 		
 		int s_height =( curSprite.getHeight()*SCALING);
 		int s_width = (curSprite.getWidth()*SCALING);
 
-		int xPixel = (int)x;
-		int yPixel = (int)y;
+		int xPixel = -(GameEngine.GetWidth() >> 1);
+		int yPixel = -(GameEngine.GetHeight() >> 1);
 		//System.out.println("rendering player at: " + xPixel + " " + yPixel);
 		
 		for(int y = 0 ; y < s_height; y++) {
@@ -165,36 +174,13 @@ public class Player extends Characters {
 		
 	}
 
-
-	
-	private void setRasterPosFromCord() {
-		int normal_height =  Tile.TILE_HEIGHT;
-		int normal_width = Tile.TILE_WIDTH;
-		int n_width_half = normal_width >> 1;
-		int n_height_half = normal_height >> 1;
-		
-		System.out.println("Player: " + xCord + " " + yCord);
-		/*Foe pixel coordinates*/
-		this.x = -(+yCord * n_width_half + xCord * n_width_half);
-		this.y = (-yCord * n_height_half + xCord * n_height_half);
-		System.out.println("Mapped to: " + this.x + " " + this.y);
-	}
-	
-	
-	
-	
 	/**
 	 * Add an item to the inventory.
 	 * @param it - The item wanted to be added to the inventory (Picked up Item)
 	 */
 	public void addItem(Item it) {
-		System.out.println("Added Item: " + it.toString());
+		//System.out.println("Added Item: " + it.toString());
 		this.inventory.add(it);
 	}
-	
-	public double getX() {return this.x; }
-	public double getY() {return this.y; }
-	public double getXCord() {return this.xCord*GameScene.SCALING;}
-	public double getYCord() {return this.yCord*GameScene.SCALING;}
 	
 }

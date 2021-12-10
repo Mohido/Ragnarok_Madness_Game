@@ -192,12 +192,12 @@ public class GameScene implements Scene{
 	public static void zoomOut() { SCALING = (SCALING > 1 )? SCALING - 1 : 1 ;}
 
 
+	private int temp = 0;
 	public void updateOffset() {
-		xOffset = this.player.getX() ; 		//+ GameEngine.GetWidth()/2 For testing change all offset variables to player.y
-		yOffset = this.player.getY() ;		//+ GameEngine.GetHeight()/2  For testing change all offset variables to player.y
+		temp += 1;
+		xOffset = this.player.getX() + (GameEngine.GetWidth() >> 1); 		//+ GameEngine.GetWidth()/2 For testing change all offset variables to player.y
+		yOffset = this.player.getY()  + (GameEngine.GetHeight() >> 1);		//+ GameEngine.GetHeight()/2  For testing change all offset variables to player.y
 		
-		//System.out.println("Player: " +  this.player.getXCord() + " " + this.player.getYCord());
-		//System.out.println("scene: " +  (int)xOffset + " " + (int)yOffset);
 	}
 	
 	

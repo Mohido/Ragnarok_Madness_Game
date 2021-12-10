@@ -35,7 +35,7 @@ public class Game {
     final String SETTINGS_IMAGE_URL = Paths.get("").toAbsolutePath().getParent()  +  "/res/settings_menu.jpeg";
     
 	/*Loading Spritesheets.*/
-	final SpriteSheet DESERT_SHEET = new SpriteSheet(Paths.get("").toAbsolutePath().getParent()  +  "/res/desert_res_orig.png");
+	final SpriteSheet DESERT_SHEET = new SpriteSheet(Paths.get("").toAbsolutePath().getParent()  +  "/res/ground_tiles_d.png");
 	final SpriteSheet PORTAL_SHEET = new SpriteSheet(Paths.get("").toAbsolutePath().getParent()  + "/res/porotals.png");
 	final SpriteSheet PLAYER_SHEET = new SpriteSheet( Paths.get("").toAbsolutePath().getParent() + "/res/jaden_yuki_2.png");
 	final SpriteSheet GRASS_SHEET = new SpriteSheet( Paths.get("").toAbsolutePath().getParent() + "/res/grass.png");
@@ -85,14 +85,14 @@ public class Game {
 		Map map = initMap();
 		
 		// Initializing the player. 
-		Player player = initPlayer(5,5); 
-		
+		Player player = initPlayer(3,0); 
+		player.setMap(map);
 		// Initializing the Foes.
-		Foe foe1 = initFoe1(0,0);
+		Foe foe1 = initFoe1(1,1);
 		foe1.setMap(map);
 		
 		// Initializing the Foes.
-		Foe foe2 = initFoe1(5,5);
+		Foe foe2 = initFoe1(3,3);
 		foe2.setMap(map);
 		
 		//Creates a GameScene
