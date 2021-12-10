@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import ragmad.entity.characters.Direction;
 import ragmad.entity.characters.Player;
+import ragmad.entity.characters.npc.Foe;
 import ragmad.entity.item.WeaponItem;
 import ragmad.graphics.sprite.Sprite;
 import ragmad.graphics.sprite.SpriteSheet;
@@ -81,12 +82,23 @@ public class Game {
 		// Create A Game Engine.
 		GameEngine engine = new GameEngine(width, height);
 		
-		// Initializing the player.
+		Map map = initMap();
+		
+		// Initializing the player. 
 		Player player = initPlayer(); 
 		
+		// Initializing the Foes.
+		Foe foe1 = initFoe1(0,0);
+		foe1.setMap(map);
+		
+		// Initializing the Foes.
+		Foe foe2 = initFoe1(5,5);
+		foe2.setMap(map);
 		
 		//Creates a GameScene
-		GameScene gameScene = initGameScene(player);
+		GameScene gameScene = initGameScene(player,map);
+		gameScene.addNPC(foe1);
+		gameScene.addNPC(foe2);
 		gameScene.zoomIn();
 		
 		
@@ -126,7 +138,7 @@ public class Game {
 	
 	
 	
-	private GameScene initGameScene(Player player) {
+	private Map initMap() {
 		// Initialize GameScene.
 		HashMap<Integer, Tile> colorMap = new HashMap<Integer, Tile>();
 		
@@ -148,8 +160,12 @@ public class Game {
 		colorMap.put( 0xff8e4a4a, new Tile(0, DESERT_TILE_1, false));
 		 
 		String mapPath =  Paths.get("").toAbsolutePath().getParent()  +  "/res/temp20.png";
-		Map map = new Map(mapPath, colorMap);
-		
+		return new Map(mapPath, colorMap);
+	}
+	
+	
+	
+	private GameScene initGameScene(Player player, Map map) {
 		return new GameScene(GameEngine.GetWidth(), GameEngine.GetHeight(), map, player);
 		
 	}
@@ -209,5 +225,53 @@ public class Game {
 		
 		return new Player(GameEngine.GetWidth()/2, GameEngine.GetHeight()/2, playerSprites, spriteHeight, spriteWidth, dirSprMap);
 	}
+	
+	
+
+	
+	private Foe initFoe1(int xPos, int yPos) {
+		/*Initialization the Sprites of the player*/
+		int spriteWidth = 7; //Sprites per Direction
+		int spriteHeight = 8; //Directions
+		Sprite[] playerSprites = new Sprite[spriteWidth*spriteHeight];
+		
+		/*Sprites of the basic directions.*/
+		int basicDirectionSprites = spriteWidth*4;				 //Up,Left,Right,Down
+		int c_r = 0;											//current row
+		int i_s = 0;											// index_sprite_spriteSheet
+		while(i_s < basicDirectionSprites){	
+			int c_c = 0; // current column
+			while(c_c < spriteWidth) {
+				playerSprites[c_c + c_r*spriteWidth] = new Sprite(PLAYER_SHEET, i_s % 10 , Math.floorDiv(i_s, 10), 51, 84); // "/" floors the value.
+				c_c++; i_s++;
+			}
+			c_r++;
+		}
+		
+		/*Sprites of the Diagonal Directions (SpriteSheet is devided into 2, basic and diagonals). The only difference is that, there is a Bias in the Sprite assignment.*/
+		i_s = 0;	 										// index_sprite_spriteSheet
+		while(i_s < basicDirectionSprites){	
+			int c_c = 0; // current column
+			while(c_c < spriteWidth) { 
+				playerSprites[c_c + c_r*spriteWidth] = new Sprite(PLAYER_SHEET, (i_s % 10), Math.floorDiv(i_s, 10) + 3 , 51, 84);
+				c_c++; i_s++;
+			}
+			c_r++;
+		} 
+		
+		/*Creating Direction -> Sprite map*/
+		HashMap<Direction, Integer> dirSprMap = new HashMap<Direction, Integer>(); 
+		dirSprMap.put( Direction.DOWN, 2); 
+		dirSprMap.put( Direction.LEFT, 3); 
+		dirSprMap.put( Direction.UP, 0); 
+		dirSprMap.put( Direction.RIGHT, 1); 
+		dirSprMap.put( Direction.DOWN_LEFT, 6);
+		dirSprMap.put( Direction.UP_LEFT, 7);
+		dirSprMap.put( Direction.UP_RIGHT, 4);
+		dirSprMap.put( Direction.DOWN_RIGHT, 5);
+		
+		return new Foe(xPos, yPos, playerSprites, spriteHeight, spriteWidth, dirSprMap);
+	}
+	
 	
 }

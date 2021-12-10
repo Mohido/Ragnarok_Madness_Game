@@ -2,6 +2,7 @@ package ragmad.scenes.gamescene;
 
 import ragmad.GameEngine;
 import ragmad.entity.characters.Player;
+import ragmad.entity.characters.npc.Foe;
 import ragmad.entity.item.Item;
 import ragmad.entity.item.ItemCapsule;
 import ragmad.graphics.sprite.Sprite;
@@ -26,6 +27,7 @@ public class GameScene implements Scene{
 	private Player player; 	
 	private ArrayList<ItemCapsule> itemCapsules; // Stores the items on the scene.
 	private final static int interactionRadiusSqr = 50*50;
+	private ArrayList<Foe> foes;
 	
 	
 	/// _________________________ Constructor Area_________________________________
@@ -45,7 +47,7 @@ public class GameScene implements Scene{
 		yOffset = GameEngine.GetHeight()/2;		//For testing change all offset variables to player.y
 		this.map = map;
 		this.player = player;
-		
+		this.foes = new ArrayList();
 		this.itemCapsules = new ArrayList<>(); 
 	}
 	
@@ -89,6 +91,8 @@ public class GameScene implements Scene{
 	public void update() {
 		frameMovement = 5;// (int)(5.0 *  (GameEngine.GetDelta())); /// <--- BUG: Delta Time is not set properly.
 		player.update(frameMovement, this.map);
+		for(int i = 0; i < foes.size() ;i++) { this.foes.get(i).update();}
+		
 		
 		if (Keyboard.esc()) { 
 			GameEngine.ChangeScene("Menu");
@@ -146,6 +150,7 @@ public class GameScene implements Scene{
 		
 		renderCapsules(); 
 		player.render(1);
+		for(int i = 0; i < foes.size() ;i++) { this.foes.get(i).render();}
 	}
 	
 	/**
@@ -183,6 +188,10 @@ public class GameScene implements Scene{
 	 * Zooming out is used to scale out the view. Zooming out of the game.
 	 */
 	public static void zoomOut() { SCALING = (SCALING > 1 )? SCALING - 1 : 1 ;}
+
+
+
+	public void addNPC(Foe yugi) {this.foes.add(yugi);}
 	
 	
 	

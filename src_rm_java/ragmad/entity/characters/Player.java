@@ -23,7 +23,7 @@ public class Player extends Characters {
 	private Sprite curSprite;
 	private int anim = 0;
 	private boolean isWalking = false;
-	
+	private double xCord, yCord;
 	int animationRows, animationCols;
 	private Sprite[] animationSprites;
 	private HashMap<Direction, Integer> spriteMap;
@@ -114,6 +114,10 @@ public class Player extends Characters {
 	
 	
 	
+	
+	
+	
+	
 	/**
 	 * Method that renders the player on the screen
 	 * 
@@ -154,6 +158,21 @@ public class Player extends Characters {
 	}
 
 
+	
+//	private void cordToRaster() {
+//		int normal_height =  Tile.TILE_HEIGHT*GameScene.SCALING;
+//		int normal_width = Tile.TILE_WIDTH*GameScene.SCALING;
+//		int n_width_half = normal_width >> 1;
+//		int n_height_half = normal_height >> 1;
+//
+//		/*Foe pixel coordinates*/
+//		this.x = (-yCord * n_width_half - xCord * n_width_half - GameScene.xOffset);
+//		this.y = (-yCord * n_height_half + xCord * n_height_half -  GameScene.yOffset);
+//	}
+	
+	
+	
+	
 	/**
 	 * Add an item to the inventory.
 	 * @param it - The item wanted to be added to the inventory (Picked up Item)

@@ -77,7 +77,7 @@ public class Map {
 	 * @param yOffset how much the scene has moved in y direction
 	 * @return exact tile at that location
 	 */
-	public int[] getTileAt(int mouseX,int mouseY, int xOffset, int yOffset) {
+	public int[] getTileAt(int mouseX, int mouseY, int xOffset, int yOffset) {
         //	half width, height... MUST BE SUBSTITUTED PROPERLY
         var tileWidth = (this.tileWidth * GameScene.SCALING) >> 1; 
         var tileHeight = (this.tileHeight * GameScene.SCALING) >> 1;
@@ -195,7 +195,7 @@ public class Map {
 	 */
 	public boolean tileExists(int x, int y) {return x >= 0 & y >= 0 & x < width & y < height;}
 
-	public int getTileYIncrementByTileZ(int tileZ) {return 0;} // Might be needed in the getTileAt() function
+	public int getTileYIncrementByTileZ(int tileZ) {return tileZ;} // Might be needed in the getTileAt() function
 	public int[] getMap() {return this.map;}
 	public int getWidth() {return this.width;}
 	public int getHeight() {return this.height;}
