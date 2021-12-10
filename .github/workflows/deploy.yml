@@ -62,5 +62,16 @@ jobs:
           name: "ragnorarok_build_v1.${{ github.run_number }}.commit-number:${{ github.sha }}.zip" # optional string
           overwrite: "false" # optional boolean
       
-      - name: Output the google drive link
-        run: echo 'https://drive.google.com/drive/folders/1WWuRuRJs5xWzqpL-4-UXZm4yYPCz3QWZ?usp=sharing'
+      - name: Saving the link in a file
+      - run: echo -n -e "HELLO\n !\n World!" > text.txt
+      - uses: pCYSl5EDgo/cat@master
+        id: hello
+        with:
+          path: text.txt
+          
+      - name: Output the link   
+      - run: echo $TEXT
+        env:
+          TEXT: ${{ steps.hello.outputs.text }}
+      
+      
